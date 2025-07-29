@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>itsu - Family Space Game</title>
+</head>
+<body>
+  <main style="display: flex; flex-direction: column; align-items: center; min-height: 100vh; background: #181f2a; color: #fff; font-family: 'Segoe UI', Arial, sans-serif;">
+    <h1 style="margin-top: 2rem;">itsu: Family Space Shooter</h1>
+    <section style="margin: 1rem 0; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+      <div>
+        <label>Upload Your Face (Shooter):
+          <input type="file" id="player-upload" accept="image/*">
+        </label>
+      </div>
+      <div>
+        <label>Upload Target Object:
+          <input type="file" id="target-upload" accept="image/*">
+        </label>
+      </div>
+      <button id="start-btn" style="padding: 0.5rem 1.5rem; font-size: 1.1rem; background: #2d8cff; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Start Game</button>
+    </section>
+    <canvas id="game-canvas" width="480" height="640" style="background: #222; border-radius: 12px; box-shadow: 0 4px 24px #0008;"></canvas>
+    <div id="question-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#000a; align-items:center; justify-content:center; z-index:10;">
+      <div style="background:#fff; color:#222; padding:2rem; border-radius:12px; min-width:300px; max-width:90vw; text-align:center;">
+        <h2 id="question-text"></h2>
+        <input type="text" id="answer-input" style="padding:0.5rem; width:80%; font-size:1rem; margin:1rem 0;">
+        <div id="clue-text" style="color:#2d8cff; margin-bottom:1rem;"></div>
+        <button id="submit-answer" style="padding:0.5rem 1.5rem; font-size:1rem; background:#2d8cff; color:#fff; border:none; border-radius:6px; cursor:pointer;">Submit</button>
+      </div>
+    </div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>

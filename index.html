@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    .social-bar {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: rgba(20,20,40,0.85);
+      border-radius: 16px 0 0 16px;
+      box-shadow: 0 2px 12px #0006;
+      padding: 12px 8px 12px 10px;
+      transition: opacity 0.3s;
+    }
+    .social-bar a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #fff;
+      color: #222;
+      font-size: 1.5em;
+      text-decoration: none;
+      box-shadow: 0 1px 6px #0002;
+      transition: background 0.2s, color 0.2s;
+    }
+    .social-bar a:hover {
+      background: #7d3cff;
+      color: #fff;
+    }
+  <meta charset="UTF-8">
+  <title>cz103.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+      /* Modern flat look for Travels tab panels */
+      #travels .flare-card, #travels .travels-panel {
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 0 24px 0 !important;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        position: relative;
+      }
+      #travels .flare-card *, #travels .travels-panel * {
+        border: none !important;
+        box-shadow: none !important;
+      }
+      #travels .travels-panel:not(:last-child)::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg,#e0fcff 0%,#b2f7ef 100%);
+        margin: 24px 0 0 0;
+        opacity: 0.7;
+      }
+      #travels .travels-panel h3 {
+        font-size: 1.18em !important;
+        color: #006266;
+        font-weight: 700;
+        margin-bottom: 10px !important;
+        letter-spacing: 0.5px;
+      }
+      #travels .travels-panel {
+        margin-bottom: 0 !important;
+      }
+      #travels .travels-panel > *:not(h3) {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      #travels #travels-tab-panels {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 2px 16px #00b89411;
+        padding: 18px 0 0 0;
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #travels .travels-panel {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+      }
+      @media (max-width: 600px) {
+        #travels .travels-panel {
+          padding-left: 6px !important;
+          padding-right: 6px !important;
+        }
+        #travels #travels-tab-panels {
+          border-radius: 8px;
+          padding: 8px 0 0 0;
+        }
+      }
+      /* Compact Travels Tab Panels and Header */
+      #travels .travels-animated-header, #travels .travels-header {
+        padding: 18px 0 10px 0 !important;
+        margin-bottom: 18px !important;
+      }
+      #travels .travels-animated-header h2, #travels .travels-header h2 {
+        font-size: 2em !important;
+        margin-bottom: 4px !important;
+      }
+      #travels .travels-animated-header p, #travels .travels-header p {
+        font-size: 1em !important;
+        margin-bottom: 0 !important;
+      }
+      #travels .flare-card {
+        padding: 16px 0 10px 0 !important;
+        margin-bottom: 14px !important;
+      }
+      #travels .flare-card h3 {
+        font-size: 1.1em !important;
+        margin-bottom: 6px !important;
+      }
+      #travels-tabs {
+        gap: 8px !important;
+        margin-bottom: 12px !important;
+      }
+      .travels-tab-btn {
+        padding: 6px 10px !important;
+        font-size: 1em !important;
+      }
+      @media (max-width: 600px) {
+        #travels-tabs {
+          flex-wrap: wrap;
+          gap: 4px !important;
+        }
+        .travels-tab-btn {
+          font-size: 0.95em !important;
+          padding: 5px 6px !important;
+        }
+      }
+      @keyframes cardBounce {
+        0%,100% { transform: scale(1); }
+        50% { transform: scale(1.04) rotate(-1deg); }
+      }
+      .flare-card {
+        transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+        cursor: pointer;
+      }
+      .flare-card:hover {
+        box-shadow: 0 12px 40px #7d3cff44, 0 0 24px #00b89433;
+        border-color: #7d3cff;
+        animation: cardBounce 0.5s;
+        z-index: 2;
+      }
+      .flare-card h3 i.fa {
+        animation: funBounce 2.5s infinite;
+        color: #00b894;
+        transition: color 0.3s, transform 0.3s;
+      }
+      .flare-card:hover h3 i.fa {
+        color: #7d3cff;
+        transform: scale(1.18) rotate(-8deg);
+        filter: drop-shadow(0 0 6px #b2f7ef);
+        animation: none;
+      }
+    html, body { margin: 0; padding: 0; background: #0a0a1e; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+    #starfield-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      display: block;
+    }
+    header { background: linear-gradient(90deg, #7d3cff 60%, #0ff 100%); color: #fff; padding: 32px 0 18px 0; text-align: center; box-shadow: 0 2px 12px #0ff3; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; background: #fff; box-shadow: 0 2px 8px #b2f7ef22; padding: 12px 0; }
+    nav a { color: #7d3cff; text-decoration: none; font-size: 1.15em; font-weight: bold; padding: 8px 18px; border-radius: 8px; transition: background 0.2s, color 0.2s; }
+    nav a:hover, nav a.active { background: #e0fcff; color: #0a6d5d; }
+    section { max-width: 900px; margin: 36px auto; background: #fff; border-radius: 18px; box-shadow: 0 4px 32px #0002; padding: 32px 24px; }
+    h2 { color: #7d3cff; text-align: center; margin-top: 0; }
+    .section-content { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: stretch; }
+    .section-content > div { flex: 0 1 320px; min-width: 220px; max-width: 340px; text-align: center; margin: 0 auto; }
+    img, iframe { border-radius: 12px; box-shadow: 0 2px 12px #b2f7ef44; max-width: 100%; }
+    .links { margin: 18px 0 0 0; }
+    .links a { display: inline-block; margin: 6px 8px; color: #0a6d5d; text-decoration: underline; font-size: 1em; }
+    @media (max-width: 700px) { section { padding: 18px 4vw; } .section-content { flex-direction: column; align-items: stretch; } }
+  </style>
+</head>
+<body>
+  <canvas id="starfield-bg"></canvas>
+  <header>
+    <h1>Welcome to cz103.com</h1>
+    <div style="font-size:1.2em;max-width:700px;margin:0 auto;">A fun, friendly, and inclusive space for families, travelers, teens, kids, and lifelong learners of all backgrounds, religions, and orientations.</div>
+  </header>
+  <nav>
+    <a href="#about" class="active">About</a>
+    <a href="#home">Home</a>
+    <a href="#moms">Moms</a>
+    <a href="#dads">Dads</a>
+    <a href="#travels">Travels</a>
+    <a href="#teens">Teenagers</a>
+    <a href="#kids">Kids Zone</a>
+    <a href="#education">Education</a>
+  </nav>
+  <main>
+    <section id="about" class="site-section">
+      <div>
+        <div class="about-card" style="max-width:900px;margin:36px auto 0 auto;background:rgba(255,255,255,0.93);border-radius:20px;box-shadow:0 4px 32px #0002;padding:32px 18px;">
+          <h2 style="text-align:center;color:#7d3cff;margin-top:0;">About</h2>
+          <div id="socialBar" style="display:flex;justify-content:center;gap:24px;margin:18px 0 24px 0;">
+            <a href="https://facebook.com/" target="_blank" title="Facebook" style="color:#1877f3;font-size:2em;"><i class="fa fa-facebook"></i></a>
+            <a href="https://twitter.com/" target="_blank" title="Twitter" style="color:#1da1f2;font-size:2em;"><i class="fa fa-twitter"></i></a>
+            <a href="https://instagram.com/" target="_blank" title="Instagram" style="color:#e4405f;font-size:2em;"><i class="fa fa-instagram"></i></a>
+            <a href="https://tiktok.com/" target="_blank" title="TikTok" style="color:#000;font-size:2em;"><i class="fa fa-music"></i></a>
+            <a href="https://youtube.com/" target="_blank" title="YouTube" style="color:#ff0000;font-size:2em;"><i class="fa fa-youtube"></i></a>
+            <a href="mailto:charlestonzaragoza@example.com" title="Email" style="color:#7d3cff;font-size:2em;"><i class="fa fa-envelope"></i></a>
+          </div>
+        <h2 style="text-align:center;color:#7d3cff;margin-top:0;">About</h2>
+        <div style="text-align:center;margin-bottom:24px;">
+          <span style="display:inline-block;font-size:1.3em;font-weight:bold;color:#0a6d5d;">Welcome to Charleston Zaragoza Page</span><br>
+          <span style="font-size:1.1em;color:#333;">Hope you enjoy and find it easy to navigate all that I have to offer.</span>
+        </div>
+        <div class="section-content" style="justify-content:center;gap:32px;flex-wrap:wrap;">
+          <div style="min-width:240px;max-width:340px;text-align:center;">
+            <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="About us" style="border-radius:14px;box-shadow:0 2px 12px #b2f7ef44;">
+          </div>
+          <div style="flex:1;min-width:240px;max-width:420px;text-align:left;display:flex;align-items:center;">
+            <div>
+              <strong>cz103.com</strong> is your one-stop, one-way destination to book and find interactive things for all backgrounds, all ages, all religions, and all sexual orientations.<br><br>
+              <span style="font-size:1.08em;">Our mission is to provide a welcoming, inclusive, and resourceful space where everyone can discover activities, support, and fun—no matter who you are or where you come from. We believe in celebrating diversity and making sure every visitor feels at home.</span><br><br>
+              <span style="font-size:1.08em;">On this site, you'll find:</span>
+              <ul style="margin:8px 0 0 18px;font-size:1.05em;">
+                <li>Family-friendly resources and support for all backgrounds</li>
+                <li>Travel tips, games, and learning for all ages</li>
+                <li>Inclusive content for every religion, orientation, and identity</li>
+                <li>Easy access to news, entertainment, and educational tools</li>
+                <li>Opportunities to connect, share, and grow together</li>
+              </ul>
+              <div style="margin:18px 0 0 0;">
+                <strong>Get involved!</strong> <br>
+                <span style="font-size:0.98em;">Take our quick poll below, check out a fun fact, or <a href="#contact" style="color:#7d3cff;text-decoration:underline;">contact me</a> with your ideas!</span>
+              </div>
+            </div>
+          </div>
+          <div style="min-width:240px;max-width:340px;text-align:center;">
+            <iframe width="100%" height="180" src="https://www.youtube.com/embed/1t0A_tZGrYw" title="Welcome to cz103.com" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:32px;margin-top:32px;">
+          <div style="background:rgba(125,60,255,0.07);border-radius:14px;padding:18px 12px;min-width:220px;max-width:320px;box-shadow:0 2px 8px #7d3cff22;text-align:center;">
+            <h4 style="color:#7d3cff;margin:0 0 10px 0;">Quick Poll</h4>
+            <form id="about-poll" style="font-size:1em;">
+              <label><input type="radio" name="fav" value="resources"> Family Resources</label><br>
+              <label><input type="radio" name="fav" value="travel"> Travel & Fun</label><br>
+              <label><input type="radio" name="fav" value="education"> Education</label><br>
+              <label><input type="radio" name="fav" value="community"> Community</label><br>
+              <button type="button" onclick="document.getElementById('poll-result').innerText='Thank you for voting!'
+                " style="margin-top:8px;padding:4px 12px;border-radius:8px;background:#7d3cff;color:#fff;border:none;cursor:pointer;">Vote</button>
+            </form>
+            <div id="poll-result" style="margin-top:8px;color:#0a6d5d;font-weight:bold;"></div>
+          </div>
+          <div style="background:rgba(0,234,255,0.07);border-radius:14px;padding:18px 12px;min-width:220px;max-width:320px;box-shadow:0 2px 8px #00eaff22;text-align:center;">
+            <h4 style="color:#00eaff;margin:0 0 10px 0;">Fun Fact</h4>
+            <div style="font-size:1.05em;">The word "family" comes from the Latin "familia," meaning household or close association!</div>
+          </div>
+          <div style="background:rgba(10,109,93,0.07);border-radius:14px;padding:18px 12px;min-width:220px;max-width:320px;box-shadow:0 2px 8px #0a6d5d22;text-align:center;">
+            <h4 style="color:#0a6d5d;margin:0 0 10px 0;">Contact</h4>
+            <div style="font-size:1.05em;">Have ideas or want to connect? <a href="mailto:charlestonzaragoza@example.com" style="color:#7d3cff;text-decoration:underline;">Email Charleston</a></div>
+          </div>
+        </div>
+        <div class="links" style="margin-top:24px;text-align:center;">
+          <a href="https://www.befrienders.org/" target="_blank">Support & Helplines</a>
+          <a href="https://www.un.org/en/about-us/universal-declaration-of-human-rights" target="_blank">Universal Rights</a>
+        </div>
+        </div>
+      </div>
+    </section>
+    <section id="home" class="site-section" style="display:none;">
+      <div class="home-card" style="max-width:1100px;margin:40px auto 0 auto;background:rgba(20,20,40,0.85);border-radius:24px;box-shadow:0 8px 40px #0008;padding:36px 24px;position:relative;z-index:1;">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:32px;margin-bottom:24px;">
+          <div style="background:rgba(255,255,255,0.09);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #fff2;text-align:center;">
+            <h3 style="color:#ffd700;">Daily Quote</h3>
+            <div id="daily-quote" style="color:#fff;font-size:1.08em;"></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.09);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #fff2;text-align:center;">
+            <h3 style="color:#00eaff;">Joke of the Day</h3>
+            <div id="daily-joke" style="color:#fff;font-size:1.08em;"></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.09);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #fff2;text-align:center;">
+            <h3 style="color:#ff7b00;">Weather</h3>
+            <div id="weather-widget" style="color:#fff;font-size:1.08em;">Loading weather...</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:32px;margin-bottom:24px;">
+          <div style="background:rgba(255,255,255,0.09);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #fff2;text-align:center;">
+            <h3 style="color:#7d3cff;">Quick Poll</h3>
+            <form id="home-poll" style="font-size:1em;">
+              <label><input type="radio" name="fav2" value="news"> News</label><br>
+              <label><input type="radio" name="fav2" value="movies"> Movies</label><br>
+              <label><input type="radio" name="fav2" value="games"> Games</label><br>
+              <label><input type="radio" name="fav2" value="weather"> Weather</label><br>
+              <button type="button" onclick="document.getElementById('home-poll-result').innerText='Thanks for voting!'" style="margin-top:8px;padding:4px 12px;border-radius:8px;background:#7d3cff;color:#fff;border:none;cursor:pointer;">Vote</button>
+            </form>
+            <div id="home-poll-result" style="margin-top:8px;color:#ffd700;font-weight:bold;"></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.09);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #fff2;text-align:center;">
+            <h3 style="color:#00eaff;">Random Fact</h3>
+            <div id="random-fact" style="color:#fff;font-size:1.08em;">Click for a fun fact!</div>
+            <button onclick="showRandomFact()" style="margin-top:8px;padding:4px 12px;border-radius:8px;background:#00eaff;color:#222;border:none;cursor:pointer;">Show Fact</button>
+          </div>
+          <div style="background:rgba(255,255,255,0.09);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #fff2;text-align:center;">
+            <h3 style="color:#ff7b00;">Trending</h3>
+            <div id="trending-hashtags" style="color:#fff;font-size:1.08em;">#family #fun #learning #travel #movies</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.09);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #fff2;text-align:center;">
+            <h3 style="color:#7d3cff;">Mini Clicker Game</h3>
+            <div id="clicker-score" style="color:#fff;font-size:1.2em;">Score: 0</div>
+            <button onclick="clickerAdd()" style="margin-top:8px;padding:8px 18px;border-radius:8px;background:#7d3cff;color:#fff;font-size:1.1em;border:none;cursor:pointer;">Click Me!</button>
+          </div>
+        </div>
+        <h2 style="text-align:center;color:#fff;margin-top:0;">Home</h2>
+        <div class="section-content" style="justify-content:center;gap:32px;flex-wrap:wrap;">
+          <div style="min-width:260px;max-width:340px;">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Family together" style="border-radius:14px;box-shadow:0 2px 12px #0006;">
+            <div style="color:#fff;margin:12px 0 0 0;">Welcome! Explore each section for resources, fun, and support for everyone.</div>
+          </div>
+          <div style="min-width:260px;max-width:340px;">
+            <iframe width="100%" height="180" src="https://www.youtube.com/embed/1t0A_tZGrYw" title="Welcome Video" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
+          </div>
+        </div>
+        <div class="section-content" style="margin-top:36px;gap:32px;flex-wrap:wrap;">
+          <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:18px 12px;min-width:220px;max-width:320px;box-shadow:0 2px 8px #0003;">
+            <h3 style="color:#ffd700;">National News</h3>
+            <iframe src="https://www.npr.org/sections/news/" style="width:100%;height:120px;border-radius:10px;border:none;background:#fff;" title="National News"></iframe>
+            <div><a href="https://www.npr.org/sections/news/" target="_blank" style="color:#fff;text-decoration:underline;">More National News</a></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:18px 12px;min-width:220px;max-width:320px;box-shadow:0 2px 8px #0003;">
+            <h3 style="color:#00eaff;">Local News</h3>
+            <iframe src="https://www.usatoday.com/news/local/" style="width:100%;height:120px;border-radius:10px;border:none;background:#fff;" title="Local News"></iframe>
+            <div><a href="https://www.usatoday.com/news/local/" target="_blank" style="color:#fff;text-decoration:underline;">More Local News</a></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:18px 12px;min-width:220px;max-width:320px;box-shadow:0 2px 8px #0003;">
+            <h3 style="color:#ff7b00;">Movie Previews</h3>
+            <iframe width="100%" height="120" src="https://www.youtube.com/embed/EXeTwQWrcwY" title="Movie Preview" frameborder="0" allowfullscreen style="border-radius:10px;"></iframe>
+            <div><a href="https://www.imdb.com/trailers/" target="_blank" style="color:#fff;text-decoration:underline;">More Movie Trailers</a></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:18px 12px;min-width:220px;max-width:320px;box-shadow:0 2px 8px #0003;">
+            <h3 style="color:#e50914;">Streaming & Entertainment</h3>
+            <div style="display:flex;flex-direction:column;gap:10px;align-items:center;">
+              <a href="https://www.netflix.com/" target="_blank" style="color:#e50914;font-weight:bold;font-size:1.1em;">Netflix</a>
+              <a href="https://www.hulu.com/" target="_blank" style="color:#1ce783;font-weight:bold;font-size:1.1em;">Hulu</a>
+              <a href="https://www.primevideo.com/" target="_blank" style="color:#00a8e1;font-weight:bold;font-size:1.1em;">Amazon Prime Video</a>
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:18px 12px;min-width:220px;max-width:320px;box-shadow:0 2px 8px #0003;">
+            <h3 style="color:#fff;">Fun Fact</h3>
+            <div style="font-size:1.1em;padding:12px 0;color:#fff;">Did you know? The Milky Way galaxy is estimated to contain 100–400 billion stars!</div>
+            <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Milky Way" style="width:100%;max-width:320px;border-radius:10px;">
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="moms" class="site-section" style="display:none;">
+      <h2 style="color:#e75480;text-align:center;font-family:'Comic Sans MS',cursive,sans-serif;letter-spacing:2px;">💐 Moms</h2>
+      <div class="section-content" style="flex-wrap:wrap;gap:32px;justify-content:center;">
+        <div style="width:100%;background:linear-gradient(90deg,#ffeaf6 60%,#e0fcff 100%);border-radius:18px;padding:24px 18px;margin-bottom:24px;box-shadow:0 2px 12px #e7548033;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;">
+          <div style="flex:1;min-width:260px;max-width:340px;background:rgba(255,255,255,0.98);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #e7548044;text-align:center;">
+            <h3 style="color:#e75480;">Single Moms 💖</h3>
+            <div style="margin-bottom:10px;">Support, connection, and fun for single moms!</div>
+            <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Single Mom" style="width:100%;border-radius:12px;margin-bottom:10px;box-shadow:0 2px 8px #e7548044;object-fit:cover;">
+            <div style="margin:10px 0 0 0;text-align:left;">
+              <strong>Dating Apps for Single Moms:</strong>
+              <ul style="margin:8px 0 0 16px;text-align:left;">
+                <li><a href="https://www.bumble.com/" target="_blank" style="color:#e75480;">Bumble</a></li>
+                <li><a href="https://www.match.com/" target="_blank" style="color:#7d3cff;">Match</a></li>
+                <li><a href="https://www.eharmony.com/" target="_blank" style="color:#00b894;">eHarmony</a></li>
+                <li><a href="https://www.singleparentmeet.com/" target="_blank" style="color:#e75480;">SingleParentMeet</a></li>
+                <li><a href="https://www.zoosk.com/" target="_blank" style="color:#7d3cff;">Zoosk</a></li>
+              </ul>
+            </div>
+          </div>
+          <div style="flex:2;min-width:260px;max-width:480px;background:rgba(255,250,255,0.98);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #e7548044;">
+            <h4 style="color:#7d3cff;">Single Mom Dating & Life Questionnaire</h4>
+            <form id="single-mom-quiz" style="text-align:left;font-size:1em;">
+              <label>What are you looking for? <br>
+                <select name="lookingFor" style="margin:6px 0 12px 0;width:100%;padding:4px 8px;border-radius:6px;border:1px solid #e75480;">
+                  <option value="friendship">Friendship</option>
+                  <option value="dating">Dating</option>
+                  <option value="longterm">Long-term Relationship</option>
+                  <option value="fun">Just Fun</option>
+                  <option value="advice">Advice/Support</option>
+                </select>
+              </label><br>
+              <label>Favorite date activity? <br>
+                <input type="text" name="favActivity" placeholder="e.g. Coffee, Movies, Walks" style="width:100%;padding:4px 8px;border-radius:6px;border:1px solid #7d3cff;margin-bottom:12px;">
+              </label><br>
+              <label>Kids? <br>
+                <input type="number" name="kids" min="0" max="10" style="width:60px;padding:4px 8px;border-radius:6px;border:1px solid #00b894;margin-bottom:12px;">
+              </label><br>
+              <label>What quality matters most in a partner? <br>
+                <input type="text" name="quality" placeholder="e.g. Kindness, Humor" style="width:100%;padding:4px 8px;border-radius:6px;border:1px solid #e75480;margin-bottom:12px;">
+              </label><br>
+              <button type="button" onclick="submitSingleMomQuiz()" style="margin-top:8px;padding:6px 18px;border-radius:8px;background:#e75480;color:#fff;font-size:1em;border:none;cursor:pointer;">Submit</button>
+            </form>
+            <div id="single-mom-quiz-result" style="margin-top:12px;color:#7d3cff;font-weight:bold;"></div>
+          </div>
+        </div>
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:24px;justify-content:center;margin-bottom:24px;background:linear-gradient(90deg,#ffeaf6 60%,#e0fcff 100%);border-radius:18px;padding:18px 0 0 0;box-shadow:0 2px 12px #e7548033;">
+          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=400&q=80" alt="Happy Mom and Child" style="height:120px;border-radius:14px;margin:0 18px 18px 0;box-shadow:0 2px 8px #e7548044;object-fit:cover;float:left;">
+          <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Moms Group" style="height:120px;border-radius:14px;margin:0 18px 18px 0;box-shadow:0 2px 8px #7d3cff44;object-fit:cover;float:left;">
+          <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="Motherhood Joy" style="height:120px;border-radius:14px;margin:0 18px 18px 0;box-shadow:0 2px 8px #e7548044;object-fit:cover;float:left;">
+          <div style="background:rgba(255,255,255,0.9);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #e7548044;text-align:center;">
+            <h3 style="color:#e75480;">Mom Tip of the Day</h3>
+            <div id="mom-tip" style="color:#7d3cff;font-size:1.08em;"></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.9);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #e7548044;text-align:center;">
+            <h3 style="color:#7d3cff;">Recipe of the Week</h3>
+            <div id="mom-recipe" style="color:#e75480;font-size:1.08em;"></div>
+            <a id="mom-recipe-link" href="#" target="_blank" style="color:#7d3cff;text-decoration:underline;">View Recipe</a>
+          </div>
+          <div style="background:rgba(255,255,255,0.9);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #e7548044;text-align:center;">
+            <h3 style="color:#00b894;">Self-Care Spinner</h3>
+            <div id="selfcare-result" style="color:#e75480;font-size:1.08em;">Click to get a self-care idea!</div>
+            <button onclick="spinSelfCare()" style="margin-top:8px;padding:4px 12px;border-radius:8px;background:#00b894;color:#fff;border:none;cursor:pointer;">Spin</button>
+          </div>
+        </div>
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:24px;justify-content:center;margin-bottom:24px;">
+          <div style="background:rgba(255,255,255,0.9);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #e7548044;text-align:center;">
+            <h3 style="color:#e75480;">Milestone Tracker</h3>
+            <input id="milestone-input" type="text" placeholder="Add a milestone..." style="padding:4px 8px;border-radius:6px;border:1px solid #e75480;width:80%;margin-bottom:8px;">
+            <button onclick="addMilestone()" style="padding:4px 10px;border-radius:6px;background:#e75480;color:#fff;border:none;cursor:pointer;">Add</button>
+            <ul id="milestone-list" style="text-align:left;margin:10px 0 0 0;padding:0 0 0 18px;"></ul>
+          </div>
+          <div style="background:rgba(255,255,255,0.9);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #e7548044;text-align:center;">
+            <h3 style="color:#7d3cff;">Gratitude Wall</h3>
+            <input id="gratitude-input" type="text" placeholder="I'm grateful for..." style="padding:4px 8px;border-radius:6px;border:1px solid #7d3cff;width:80%;margin-bottom:8px;">
+            <button onclick="addGratitude()" style="padding:4px 10px;border-radius:6px;background:#7d3cff;color:#fff;border:none;cursor:pointer;">Add</button>
+            <ul id="gratitude-list" style="text-align:left;margin:10px 0 0 0;padding:0 0 0 18px;"></ul>
+          </div>
+          <div style="background:rgba(255,255,255,0.9);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #e7548044;text-align:center;">
+            <h3 style="color:#00b894;">Mom Shout-Out</h3>
+            <input id="shoutout-input" type="text" placeholder="Shout out to..." style="padding:4px 8px;border-radius:6px;border:1px solid #00b894;width:80%;margin-bottom:8px;">
+            <button onclick="addShoutout()" style="padding:4px 10px;border-radius:6px;background:#00b894;color:#fff;border:none;cursor:pointer;">Add</button>
+            <ul id="shoutout-list" style="text-align:left;margin:10px 0 0 0;padding:0 0 0 18px;"></ul>
+          </div>
+        </div>
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:24px;justify-content:center;margin-bottom:24px;">
+          <div style="background:rgba(255,255,255,0.9);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #e7548044;text-align:center;">
+            <h3 style="color:#e75480;">Book/Podcast Recommendation</h3>
+            <div id="mom-book" style="color:#7d3cff;font-size:1.08em;"></div>
+            <a id="mom-book-link" href="#" target="_blank" style="color:#e75480;text-decoration:underline;">Learn More</a>
+          </div>
+          <div style="background:rgba(255,255,255,0.9);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #e7548044;text-align:center;">
+            <h3 style="color:#7d3cff;">Downloadables</h3>
+            <a href="https://www.vertex42.com/ExcelTemplates/mom-planner.html" target="_blank" style="color:#e75480;text-decoration:underline;">Mom Planner (Printable)</a><br>
+            <a href="https://www.momjunction.com/articles/printable-checklists-for-moms_00794021/" target="_blank" style="color:#7d3cff;text-decoration:underline;">Checklists for Moms</a>
+          </div>
+          <div style="background:rgba(255,255,255,0.9);border-radius:14px;padding:18px 12px;min-width:220px;max-width:340px;box-shadow:0 2px 8px #e7548044;text-align:center;">
+            <h3 style="color:#00b894;">Share Your Story</h3>
+            <textarea id="mom-story-input" rows="2" placeholder="Share something uplifting..." style="width:90%;border-radius:6px;border:1px solid #00b894;padding:6px 8px;"></textarea><br>
+            <button onclick="addMomStory()" style="margin-top:8px;padding:4px 12px;border-radius:8px;background:#00b894;color:#fff;border:none;cursor:pointer;">Share</button>
+            <ul id="mom-story-list" style="text-align:left;margin:10px 0 0 0;padding:0 0 0 18px;"></ul>
+          </div>
+        </div>
+        <div style="min-width:260px;max-width:340px;text-align:center;background:rgba(255,228,240,0.7);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #e7548044;">
+          <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Moms" style="border-radius:14px;box-shadow:0 2px 12px #b2f7ef44;">
+          <div style="margin:12px 0 0 0;font-weight:bold;color:#e75480;">Resources, support, and inspiration for mothers of all backgrounds.</div>
+          <div style="margin:18px 0 0 0;font-size:1.08em;color:#7d3cff;">“There is no way to be a perfect mother, but a million ways to be a good one.”</div>
+        </div>
+        <div style="flex:1;min-width:260px;max-width:420px;background:rgba(255,255,255,0.8);border-radius:14px;padding:18px 12px;box-shadow:0 2px 8px #7d3cff22;">
+          <img src="https://images.unsplash.com/photo-1512255967900-c1c1b0b8b6c4?auto=format&fit=crop&w=400&q=80" alt="Supportive Moms" style="width:100%;max-width:320px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 8px #e7548044;object-fit:cover;">
+          <h3 style="color:#7d3cff;">Mom Resources</h3>
+          <ul style="text-align:left;line-height:1.7;">
+            <li><strong>Diet & Nutrition:</strong> <a href="https://www.eatright.org/health/pregnancy" target="_blank">EatRight Pregnancy</a>, <a href="https://www.healthline.com/nutrition/healthy-eating-for-moms" target="_blank">Healthy Eating for Moms</a></li>
+            <li><strong>Exercise & Wellness:</strong> <a href="https://www.parents.com/pregnancy/my-body/fitness/the-best-exercises-for-pregnant-women/" target="_blank">Best Exercises for Moms</a>, <a href="https://www.fitpregnancy.com/" target="_blank">Fit Pregnancy</a></li>
+            <li><strong>Mom Vlogs & Blogs:</strong> <a href="https://www.scarymommy.com/" target="_blank">Scary Mommy</a>, <a href="https://www.mommyshorts.com/" target="_blank">Mommy Shorts</a>, <a href="https://www.theeverymom.com/" target="_blank">The Everymom</a></li>
+            <li><strong>Motivation & Inspiration:</strong> <a href="https://www.todaysparent.com/family/parenting/10-inspiring-mom-blogs/" target="_blank">Inspiring Mom Blogs</a>, <a href="https://www.ted.com/topics/motherhood" target="_blank">TED Talks: Motherhood</a></li>
+            <li><strong>Counseling & Support:</strong> <a href="https://www.postpartum.net/" target="_blank">Postpartum Support International</a>, <a href="https://www.betterhelp.com/" target="_blank">BetterHelp</a></li>
+            <li><strong>Divorce & Law:</strong> <a href="https://www.womenslaw.org/" target="_blank">WomensLaw.org</a>, <a href="https://www.divorcenet.com/" target="_blank">DivorceNet</a></li>
+            <li><strong>General Mom Communities:</strong> <a href="https://www.mother.ly/" target="_blank">Mother.ly</a>, <a href="https://www.whattoexpect.com/" target="_blank">What to Expect</a>, <a href="https://www.moms.com/" target="_blank">Moms.com</a></li>
+          </ul>
+          <div style="margin:18px 0 0 0;color:#e75480;font-size:1.08em;">Fun Fact: The average mom will have changed about 7,300 diapers by a child’s 2nd birthday!</div>
+          <div style="margin:18px 0 0 0;">
+            <form id="moms-poll" style="font-size:1em;">
+              <strong style="color:#7d3cff;">What do you need most today?</strong><br>
+              <label><input type="radio" name="momfav" value="rest"> Rest</label>
+              <label><input type="radio" name="momfav" value="motivation"> Motivation</label>
+              <label><input type="radio" name="momfav" value="advice"> Advice</label>
+              <label><input type="radio" name="momfav" value="community"> Community</label><br>
+              <button type="button" onclick="document.getElementById('moms-poll-result').innerText='Thank you, Mom! You rock!'" style="margin-top:8px;padding:4px 12px;border-radius:8px;background:#e75480;color:#fff;border:none;cursor:pointer;">Vote</button>
+            </form>
+            <div id="moms-poll-result" style="margin-top:8px;color:#e75480;font-weight:bold;"></div>
+          </div>
+        </div>
+        <div style="min-width:260px;max-width:340px;text-align:center;background:rgba(255,228,240,0.7);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #e7548044;">
+          <iframe width="100%" height="180" src="https://www.youtube.com/embed/2QKg5SZ_35I" title="Motherhood Video" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
+          <div style="margin-top:12px;">
+            <a href="https://www.youtube.com/results?search_query=mom+motivation+vlog" target="_blank" style="color:#7d3cff;text-decoration:underline;">More Mom Vlogs & Motivation Videos</a>
+          </div>
+        </div>
+        <div style="width:100%;margin-top:32px;text-align:center;background:rgba(255,228,240,0.7);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #e7548044;">
+          <h3 style="color:#e75480;">Mom Memory Game</h3>
+          <div id="mom-memory-game" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:12px 0;"></div>
+          <div id="mom-memory-status" style="color:#7d3cff;font-weight:bold;margin-top:10px;"></div>
+          <button onclick="resetMomMemoryGame()" style="margin-top:10px;padding:6px 18px;border-radius:8px;background:#e75480;color:#fff;font-size:1em;border:none;cursor:pointer;">Restart Game</button>
+        </div>
+      </div>
+    </section>
+    <section id="dads" class="site-section" style="display:none;">
+      <h2 style="color:#0077b6;text-align:center;font-family:'Comic Sans MS',cursive,sans-serif;letter-spacing:2px;margin-bottom:24px;">🧢 Dads</h2>
+      <div style="width:100%;background:linear-gradient(90deg,#e0fcff 60%,#f0e6ff 100%);border-radius:18px;padding:24px 0;box-shadow:0 2px 12px #0077b633;display:flex;flex-direction:column;align-items:center;margin-bottom:36px;">
+        <h3 style="color:#0077b6;margin-bottom:12px;"><i class="fa fa-camera-retro"></i> Dad Gallery</h3>
+        <div id="dad-gallery" style="display:flex;gap:24px;justify-content:center;align-items:center;flex-wrap:wrap;">
+          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=400&q=80" alt="City Dad" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #0077b644;">
+          <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="Country Dad" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #43a04744;">
+          <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Single Dad" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #0077b644;">
+          <img src="https://images.unsplash.com/photo-1512255967900-c1c1b0b8b6c4?auto=format&fit=crop&w=400&q=80" alt="Supportive Dad" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #43a04744;">
+        </div>
+      </div>
+      <div class="section-content" style="display:flex;flex-direction:column;gap:40px;align-items:center;max-width:1200px;margin:0 auto;">
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:40px;justify-content:center;background:rgba(255,255,255,0.97);border-radius:18px;padding:24px 0;box-shadow:0 2px 12px #0077b633;">
+          <div style="flex:1;min-width:260px;max-width:340px;background:rgba(240,250,255,0.98);border-radius:14px;padding:24px 18px;box-shadow:0 2px 12px #0077b644;text-align:center;margin:0 12px;display:flex;flex-direction:column;align-items:center;">
+            <i class="fa fa-building" style="font-size:2em;color:#0077b6;margin-bottom:8px;"></i>
+            <h3 style="color:#0077b6;margin-bottom:8px;">City Dads</h3>
+            <div style="margin-bottom:10px;">Urban resources, support, and fun for city dads!</div>
+            <a href="https://citydadsgroup.com/" target="_blank" style="color:#0077b6;text-decoration:underline;">City Dads Group</a><br>
+            <a href="https://www.fatherly.com/" target="_blank" style="color:#43a047;text-decoration:underline;">Fatherly</a>
+          </div>
+          <div style="flex:1;min-width:260px;max-width:340px;background:rgba(240,255,240,0.98);border-radius:14px;padding:24px 18px;box-shadow:0 2px 12px #43a04744;text-align:center;margin:0 12px;display:flex;flex-direction:column;align-items:center;">
+            <i class="fa fa-tree" style="font-size:2em;color:#43a047;margin-bottom:8px;"></i>
+            <h3 style="color:#43a047;margin-bottom:8px;">Country Dads</h3>
+            <div style="margin-bottom:10px;">Advice, community, and inspiration for country dads!</div>
+            <a href="https://www.countrydad.com/" target="_blank" style="color:#43a047;text-decoration:underline;">Country Dad</a><br>
+            <a href="https://www.dad.info/" target="_blank" style="color:#0077b6;text-decoration:underline;">Dad.info</a>
+          </div>
+        </div>
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:40px;justify-content:center;background:rgba(255,255,255,0.97);border-radius:18px;padding:24px 0;box-shadow:0 2px 12px #0077b633;align-items:flex-start;">
+          <div style="flex:1;min-width:260px;max-width:340px;background:rgba(255,255,255,0.98);border-radius:14px;padding:24px 18px;box-shadow:0 2px 12px #0077b644;text-align:center;display:flex;flex-direction:column;align-items:center;">
+            <i class="fa fa-user" style="font-size:2em;color:#0077b6;margin-bottom:8px;"></i>
+            <h3 style="color:#0077b6;margin-bottom:8px;">Single Dads 💪</h3>
+            <div style="margin-bottom:10px;">Support, connection, and fun for single dads!</div>
+            <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Single Dad" style="width:100%;border-radius:12px;margin-bottom:10px;box-shadow:0 2px 8px #0077b644;object-fit:cover;">
+            <div style="margin:10px 0 0 0;text-align:left;">
+              <strong>Dating Apps for Single Dads:</strong>
+              <ul style="margin:8px 0 0 16px;text-align:left;">
+                <li><a href="https://www.bumble.com/" target="_blank" style="color:#0077b6;">Bumble</a></li>
+                <li><a href="https://www.match.com/" target="_blank" style="color:#43a047;">Match</a></li>
+                <li><a href="https://www.eharmony.com/" target="_blank" style="color:#0077b6;">eHarmony</a></li>
+                <li><a href="https://www.singleparentmeet.com/" target="_blank" style="color:#43a047;">SingleParentMeet</a></li>
+                <li><a href="https://www.zoosk.com/" target="_blank" style="color:#0077b6;">Zoosk</a></li>
+              </ul>
+            </div>
+          </div>
+          <div style="flex:2;min-width:260px;max-width:480px;background:rgba(240,250,255,0.98);border-radius:14px;padding:24px 18px;box-shadow:0 2px 12px #0077b644;display:flex;flex-direction:column;align-items:center;">
+            <h4 style="color:#0077b6;"><i class="fa fa-question-circle"></i> Single Dad Dating & Life Questionnaire</h4>
+            <form id="single-dad-quiz" style="text-align:left;font-size:1em;width:100%;max-width:340px;">
+              <label>What are you looking for? <br>
+                <select name="lookingFor" style="margin:6px 0 12px 0;width:100%;padding:4px 8px;border-radius:6px;border:1px solid #0077b6;">
+                  <option value="friendship">Friendship</option>
+                  <option value="dating">Dating</option>
+                  <option value="longterm">Long-term Relationship</option>
+                  <option value="fun">Just Fun</option>
+                  <option value="advice">Advice/Support</option>
+                </select>
+              </label><br>
+              <label>Favorite dad activity? <br>
+                <input type="text" name="favActivity" placeholder="e.g. BBQ, Sports, Fishing" style="width:100%;padding:4px 8px;border-radius:6px;border:1px solid #43a047;margin-bottom:12px;">
+              </label><br>
+              <label>Kids? <br>
+                <input type="number" name="kids" min="0" max="10" style="width:60px;padding:4px 8px;border-radius:6px;border:1px solid #0077b6;margin-bottom:12px;">
+              </label><br>
+              <label>What quality matters most in a partner? <br>
+                <input type="text" name="quality" placeholder="e.g. Loyalty, Humor" style="width:100%;padding:4px 8px;border-radius:6px;border:1px solid #43a047;margin-bottom:12px;">
+              </label><br>
+              <button type="button" onclick="submitSingleDadQuiz()" style="margin-top:8px;padding:6px 18px;border-radius:8px;background:#0077b6;color:#fff;font-size:1em;border:none;cursor:pointer;">Submit</button>
+            </form>
+            <div id="single-dad-quiz-result" style="margin-top:12px;color:#0077b6;font-weight:bold;"></div>
+          </div>
+        </div>
+        <div style="width:100%;margin-top:32px;text-align:center;background:rgba(224,252,255,0.7);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #0077b644;">
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:32px;justify-content:center;margin:32px 0 0 0;background:linear-gradient(90deg,#e0fcff 60%,#f0e6ff 100%);border-radius:18px;padding:18px 0;box-shadow:0 2px 12px #0077b633;">
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:32px;justify-content:center;margin:32px 0 0 0;background:linear-gradient(90deg,#fffbe6 60%,#e0fcff 100%);border-radius:18px;padding:18px 0;box-shadow:0 2px 12px #ffb30033;align-items:center;">
+          <div style="min-width:260px;max-width:340px;text-align:center;background:rgba(255,255,255,0.98);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #ffb30044;">
+            <h3 style="color:#ffb300;">🤠 Country Western Stores</h3>
+            <a href="https://www.cavenders.com/" target="_blank" style="color:#0077b6;text-decoration:underline;">Cavender's</a><br>
+            <a href="https://www.bootbarn.com/" target="_blank" style="color:#43a047;text-decoration:underline;">Boot Barn</a><br>
+            <a href="https://www.sheplers.com/" target="_blank" style="color:#ffb300;text-decoration:underline;">Sheplers</a><br>
+            <a href="https://www.rodsshoes.com/" target="_blank" style="color:#0077b6;text-decoration:underline;">Rod's Western Palace</a>
+          </div>
+          <div style="min-width:260px;max-width:340px;text-align:center;background:rgba(255,255,255,0.98);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #43a04744;">
+            <h3 style="color:#43a047;">🏠 Home Goods Stores</h3>
+            <a href="https://www.homedepot.com/" target="_blank" style="color:#0077b6;text-decoration:underline;">Home Depot</a><br>
+            <a href="https://www.lowes.com/" target="_blank" style="color:#43a047;text-decoration:underline;">Lowe's</a><br>
+            <a href="https://www.acehardware.com/" target="_blank" style="color:#ffb300;text-decoration:underline;">Ace Hardware</a><br>
+            <a href="https://www.menards.com/" target="_blank" style="color:#0077b6;text-decoration:underline;">Menards</a>
+          </div>
+        </div>
+        <div style="width:100%;margin:24px 0 0 0;text-align:center;background:rgba(255,255,255,0.85);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #ffb30044;">
+          <h3 style="color:#ffb300;">🧢 Dad Fun Fact</h3>
+          <div style="font-size:1.08em;color:#0077b6;">The average dad will walk about 1,700 miles chasing kids before they turn 10!</div>
+        </div>
+          <div style="min-width:260px;max-width:340px;text-align:center;background:rgba(255,255,255,0.98);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #0077b644;">
+            <h3 style="color:#0077b6;">Dad Joke Generator</h3>
+            <div id="dad-joke" style="color:#43a047;font-size:1.08em;margin-bottom:8px;">Click below for a dad joke!</div>
+            <button onclick="generateDadJoke()" style="margin-top:8px;padding:4px 12px;border-radius:8px;background:#0077b6;color:#fff;border:none;cursor:pointer;">Get Joke</button>
+          </div>
+          <div style="min-width:260px;max-width:340px;text-align:center;background:rgba(255,255,255,0.98);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #43a04744;">
+            <h3 style="color:#43a047;">Sports Poll</h3>
+            <form id="dad-sports-poll" style="font-size:1em;">
+              <strong style="color:#0077b6;">Favorite Sport?</strong><br>
+              <label><input type="radio" name="dadsport" value="Football"> Football</label>
+              <label><input type="radio" name="dadsport" value="Baseball"> Baseball</label>
+              <label><input type="radio" name="dadsport" value="Basketball"> Basketball</label>
+              <label><input type="radio" name="dadsport" value="Fishing"> Fishing</label>
+              <label><input type="radio" name="dadsport" value="Golf"> Golf</label><br>
+              <button type="button" onclick="document.getElementById('dad-sports-poll-result').innerText='Thanks for voting, Dad!'" style="margin-top:8px;padding:4px 12px;border-radius:8px;background:#43a047;color:#fff;border:none;cursor:pointer;">Vote</button>
+            </form>
+            <div id="dad-sports-poll-result" style="margin-top:8px;color:#43a047;font-weight:bold;"></div>
+          </div>
+          <div style="min-width:260px;max-width:340px;text-align:center;background:rgba(255,255,255,0.98);border-radius:14px;padding:18px 12px;box-shadow:0 2px 12px #0077b644;">
+            <h3 style="color:#0077b6;">Quick BBQ Recipe</h3>
+            <div id="dad-bbq-recipe" style="color:#0077b6;font-size:1.08em;margin-bottom:8px;">Click for a BBQ tip!</div>
+            <button onclick="generateBBQRecipe()" style="margin-top:8px;padding:4px 12px;border-radius:8px;background:#0077b6;color:#fff;border:none;cursor:pointer;">Get Recipe</button>
+          </div>
+        </div>
+          <div style="display:flex;flex-wrap:wrap;gap:32px;justify-content:center;align-items:flex-start;">
+            <div style="flex:1;min-width:260px;max-width:400px;text-align:center;">
+              <h4 style="color:#0077b6;margin-bottom:8px;">City Dad Inspiration</h4>
+              <iframe width="100%" height="180" src="https://www.youtube.com/embed/1QGQ8Z1rH4w" title="City Dad Inspiration" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
+              <div style="margin-top:8px;font-size:0.98em;color:#0077b6;">Urban fatherhood stories and advice.</div>
+            </div>
+            <div style="flex:1;min-width:260px;max-width:400px;text-align:center;">
+              <h4 style="color:#43a047;margin-bottom:8px;">Country Dad Inspiration</h4>
+              <iframe width="100%" height="180" src="https://www.youtube.com/embed/2QKg5SZ_35I" title="Country Dad Inspiration" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
+              <div style="margin-top:8px;font-size:0.98em;color:#43a047;">Country living, parenting, and outdoor fun.</div>
+            </div>
+          </div>
+          <div style="margin:18px 0 0 0;font-size:1.08em;color:#0077b6;font-weight:bold;">Advice, community, and fun for dads everywhere.</div>
+          <div style="margin:8px 0 0 0;font-size:1.08em;color:#43a047;">“A truly rich man is one whose children run into his arms when his hands are empty.”</div>
+        </div>
+      </div>
+    </section>
+    <section id="travels" class="site-section" style="display:none;">
+      <h2 style="color:#006266;text-align:center;font-family:'Segoe UI',Arial,sans-serif;font-size:2.4em;letter-spacing:1px;margin-bottom:18px;">✈️ Travel & Adventure</h2>
+      <div class="section-content" style="display:flex;flex-direction:column;align-items:center;max-width:1300px;margin:0 auto;padding:0 10px;font-family:'Segoe UI',Arial,sans-serif;">
+        <!-- Travels Navigation Tabs -->
+        <div id="travels-tabs" style="display:flex;gap:18px;justify-content:center;margin-bottom:32px;flex-wrap:wrap;">
+          <button class="travels-tab-btn active" onclick="showTravelsTab('gallery')"><i class="fa fa-picture-o"></i> Gallery</button>
+          <button class="travels-tab-btn" onclick="showTravelsTab('upload')"><i class="fa fa-upload"></i> Upload</button>
+          <button class="travels-tab-btn" onclick="showTravelsTab('quiz')"><i class="fa fa-question-circle"></i> Quiz</button>
+          <button class="travels-tab-btn" onclick="showTravelsTab('book')"><i class="fa fa-plane"></i> Book</button>
+          <button class="travels-tab-btn" onclick="showTravelsTab('game')"><i class="fa fa-gamepad"></i> Game</button>
+          <button class="travels-tab-btn" onclick="showTravelsTab('video')"><i class="fa fa-video-camera"></i> Video</button>
+        </div>
+        <style>
+          .travels-tab-btn {
+            background: #fff;
+            color: #00b894;
+            border: 2px solid #00b89444;
+            border-radius: 10px 10px 0 0;
+            font-size: 1.1em;
+            font-weight: 600;
+            padding: 10px 22px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+            outline: none;
+          }
+          .travels-tab-btn.active, .travels-tab-btn:hover {
+            background: linear-gradient(90deg,#00b894 60%,#7d3cff 100%);
+            color: #fff;
+            border-color: #7d3cff;
+          }
+        </style>
+        <div class="travels-animated-header" style="width:100%;max-width:900px;text-align:center;margin-bottom:48px;position:relative;overflow:hidden;background:linear-gradient(90deg,#00b894 0%,#7d3cff 100%);border-radius:32px;box-shadow:0 8px 32px #7d3cff33;">
+          <span class="header-shape shape1"></span>
+          <span class="header-shape shape2"></span>
+          <span class="header-shape shape3"></span>
+          <h2 style="font-size:2.7em;font-weight:900;letter-spacing:1.5px;margin-bottom:10px;z-index:1;position:relative;text-shadow:0 2px 16px #00b89488;">
+            <i class="fa fa-globe animated-globe" style="margin-right:12px;"></i>Explore the World
+          </h2>
+          <p style="font-size:1.25em;color:#fffde9;max-width:700px;margin:0 auto 0 auto;z-index:1;position:relative;">
+            Discover, plan, and share your adventures! <b>Find inspiration, book your trip, play games, and connect with fellow travelers</b>—all in one place.
+          </p>
+        </div>
+        <style>
+          @keyframes moveShape1 {
+            0% { left: -60px; top: -60px; }
+            50% { left: -40px; top: -80px; }
+            100% { left: -60px; top: -60px; }
+          }
+          @keyframes moveShape2 {
+            0% { right: -40px; bottom: -40px; }
+            50% { right: -60px; bottom: -60px; }
+            100% { right: -40px; bottom: -40px; }
+          }
+          @keyframes moveShape3 {
+            0% { left: 40%; top: 80%; }
+            50% { left: 45%; top: 85%; }
+            100% { left: 40%; top: 80%; }
+          }
+          @keyframes bounceGlobe {
+            0%,100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-18px) scale(1.15); }
+          }
+          .travels-animated-header .header-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.18;
+            z-index: 0;
+            background: #fff;
+          }
+          .travels-animated-header .shape1 {
+            width: 180px; height: 180px; left: -60px; top: -60px; animation: moveShape1 6s infinite alternate;
+          }
+          .travels-animated-header .shape2 {
+            width: 120px; height: 120px; right: -40px; bottom: -40px; animation: moveShape2 7s infinite alternate-reverse;
+          }
+          .travels-animated-header .shape3 {
+            width: 80px; height: 80px; left: 40%; top: 80%; animation: moveShape3 8s infinite alternate;
+          }
+          .travels-animated-header .animated-globe {
+            color: #fffde9;
+            animation: bounceGlobe 2.2s infinite;
+            filter: drop-shadow(0 0 8px #00b89488);
+          }
+        </style>
+        <div style="display:flex;flex-wrap:wrap;gap:38px;justify-content:center;width:100%;background:linear-gradient(120deg,#f8fafc 60%,#e0fcff 100%);border-radius:32px;padding:38px 0 38px 0;box-shadow:0 8px 32px #00b89422;">
+        <!-- Left Column: Gallery & Upload -->
+        <div style="flex:1;min-width:320px;max-width:420px;display:flex;flex-direction:column;gap:32px;">
+          <div style="background:linear-gradient(90deg,#f8fafc 60%,#e0fcff 100%);border-radius:18px;padding:28px 0 18px 0;box-shadow:0 4px 18px #00626622;display:flex;flex-direction:column;align-items:center;border:2px solid #00b89422;animation:flareGlow 2.5s infinite alternate;">
+            <h3 style="color:#006266;font-size:1.5em;font-weight:600;margin-bottom:12px;letter-spacing:0.5px;"><i class="fa fa-picture-o"></i> Travel Photo Gallery</h3>
+            <div id="travel-gallery" style="display:flex;gap:24px;justify-content:center;align-items:center;flex-wrap:wrap;">
+              <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Mountains" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #00b89444;">
+              <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Lake" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #00b89444;">
+              <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Desert" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #00b89444;">
+              <img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=400&q=80" alt="City" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #00b89444;">
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,0.99);border-radius:18px;padding:28px 0 18px 0;box-shadow:0 4px 18px #00626622;display:flex;flex-direction:column;align-items:center;border:2px solid #00b89422;animation:flareGlow 2.5s infinite alternate;">
+            <h3 style="color:#006266;font-size:1.2em;font-weight:500;margin-bottom:10px;"><i class="fa fa-upload"></i> Share Your Travel Photo</h3>
+            <input type="file" id="travel-photo-upload" accept="image/*" style="margin-bottom:12px;">
+            <button onclick="addTravelPhoto()" style="padding:6px 18px;border-radius:8px;background:#00b894;color:#fff;font-size:1em;border:none;cursor:pointer;">Upload</button>
+            <div id="travel-photo-preview" style="margin-top:12px;"></div>
+          </div>
+        </div>
+        <!-- Right Column: Quiz, Game, Video -->
+        <div style="flex:1;min-width:320px;max-width:420px;display:flex;flex-direction:column;gap:32px;">
+          <div style="background:linear-gradient(90deg,#f8fafc 60%,#e0fcff 100%);border-radius:18px;padding:28px 0 18px 0;box-shadow:0 4px 18px #00626622;display:flex;flex-direction:column;align-items:center;border:2px solid #00b89422;animation:flareGlow 2.5s infinite alternate;">
+            <h3 style="color:#006266;font-size:1.2em;font-weight:500;margin-bottom:10px;"><i class="fa fa-question-circle"></i> Travel Quiz</h3>
+            <form id="travel-quiz" style="text-align:left;font-size:1em;width:100%;max-width:340px;">
+              <label>What type of trip do you prefer?<br>
+                <select name="tripType" style="margin:6px 0 12px 0;width:100%;padding:4px 8px;border-radius:6px;border:1px solid #00b894;">
+                  <option value="adventure">Adventure</option>
+                  <option value="relaxation">Relaxation</option>
+                  <option value="cultural">Cultural</option>
+                  <option value="nature">Nature</option>
+                  <option value="city">City</option>
+                </select>
+              </label><br>
+              <label>Favorite travel activity?<br>
+                <input type="text" name="activity" placeholder="e.g. Hiking, Museums, Food" style="width:100%;padding:4px 8px;border-radius:6px;border:1px solid #00b894;margin-bottom:12px;">
+              </label><br>
+              <label>Dream destination?<br>
+                <input type="text" name="destination" placeholder="e.g. Paris, Tokyo, Grand Canyon" style="width:100%;padding:4px 8px;border-radius:6px;border:1px solid #00b894;margin-bottom:12px;">
+              </label><br>
+              <button type="button" onclick="submitTravelQuiz()" style="margin-top:8px;padding:6px 18px;border-radius:8px;background:#00b894;color:#fff;font-size:1em;border:none;cursor:pointer;">Submit</button>
+            </form>
+            <div id="travel-quiz-result" style="margin-top:12px;color:#00b894;font-weight:bold;"></div>
+          </div>
+          <!-- Travel Booking Links Card -->
+          <div style="background:linear-gradient(120deg,#e0fcff 60%,#b2f7ef 100%);border-radius:22px;padding:34px 0 24px 0;box-shadow:0 6px 24px #00b89433;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden;border:2px solid #00b89422;animation:flareGlow 2.5s infinite alternate;">
+            <h3 style="color:#006266;font-size:1.45em;font-weight:700;margin-bottom:18px;letter-spacing:0.5px;text-shadow:0 2px 8px #fff8;display:flex;align-items:center;gap:10px;">
+              <span style="display:inline-block;background:#00b89422;border-radius:50%;padding:12px 16px 12px 14px;"><i class="fa fa-plane" style="font-size:1.3em;color:#00b894;"></i></span>
+              Book Your Trip
+            </h3>
+            <ul style="list-style:none;padding:0;margin:0;width:95%;max-width:340px;display:flex;flex-direction:column;gap:14px;">
+              <li><a href="https://www.kayak.com/flights" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-plane" style="font-size:1.2em;"></i> Flights</a></li>
+              <li><a href="https://www.booking.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-bed" style="font-size:1.2em;"></i> Hotels</a></li>
+              <li><a href="https://www.airbnb.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-home" style="font-size:1.2em;"></i> Vacation Rentals</a></li>
+              <li><a href="https://www.rentalcars.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-car" style="font-size:1.2em;"></i> Car Rentals</a></li>
+              <li><a href="https://www.viator.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-map-signs" style="font-size:1.2em;"></i> Tours & Activities</a></li>
+              <li><a href="https://www.expedia.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-globe" style="font-size:1.2em;"></i> Expedia (All-in-One)</a></li>
+              <li><a href="https://www.worldnomads.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-shield" style="font-size:1.2em;"></i> Travel Insurance</a></li>
+              <li><a href="https://www.nomadicmatt.com/travel-blogs/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-pencil" style="font-size:1.2em;"></i> Travel Blogs</a></li>
+              <li><a href="https://www.travelfashiongirl.com/ultimate-packing-list/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-suitcase" style="font-size:1.2em;"></i> Packing Lists</a></li>
+              <li><a href="https://www.xe.com/currencyconverter/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-money" style="font-size:1.2em;"></i> Currency Converter</a></li>
+              <li><a href="https://www.weather.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-sun-o" style="font-size:1.2em;"></i> Weather</a></li>
+              <li><a href="https://www.tripadvisor.com/ShowForum-g1-i12567-Travel-Gadgets_and_Gear.html" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-comments" style="font-size:1.2em;"></i> Travel Forums</a></li>
+            </ul>
+            <style>
+              #travels .fa-plane, #travels .fa-bed, #travels .fa-home, #travels .fa-car, #travels .fa-map-signs, #travels .fa-globe {
+                transition: color 0.2s;
+              }
+              #travels a:hover {
+                background: #e0fcff !important;
+                box-shadow: 0 4px 16px #00b89444 !important;
+                color: #006266 !important;
+              }
+              #travels a:hover i {
+                color: #006266 !important;
+              }
+            </style>
+          </div>
+          <div style="background:rgba(255,255,255,0.99);border-radius:18px;padding:28px 0 18px 0;box-shadow:0 4px 18px #00626622;display:flex;flex-direction:column;align-items:center;border:2px solid #00b89422;animation:flareGlow 2.5s infinite alternate;">
+            <h3 style="color:#006266;font-size:1.2em;font-weight:500;margin-bottom:10px;"><i class="fa fa-gamepad"></i> Travel Game Idea</h3>
+            <div style="font-size:1.08em;color:#00b894;">Try the classic <b>License Plate Game</b>: Spot license plates from as many states/countries as you can during your trip. Keep score and see who wins!<br><br>
+              <a href="https://www.licenseplategame.com/" target="_blank" style="display:inline-block;margin-top:10px;padding:8px 18px;background:#00b894;color:#fff;border-radius:8px;font-weight:600;text-decoration:none;box-shadow:0 2px 8px #00b89422;transition:background 0.2s;">Play Online License Plate Game</a>
+            </div>
+          </div>
+          <div style="background:linear-gradient(90deg,#e0fcff 60%,#f8fafc 100%);border-radius:14px;padding:24px 12px;box-shadow:0 4px 18px #00626622;text-align:center;border:2px solid #00b89422;animation:flareGlow 2.5s infinite alternate;">
+    <style>
+      @keyframes flareGlow {
+        0% { box-shadow: 0 4px 18px #00b89422, 0 0 0 #00b89400; border-color: #00b89422; }
+        100% { box-shadow: 0 8px 32px #00b89466, 0 0 12px #00b89444; border-color: #00b89466; }
+      }
+      #travels i.fa {
+        transition: color 0.5s, transform 0.5s;
+      }
+      #travels i.fa:hover {
+        color: #7d3cff;
+        transform: scale(1.18) rotate(-8deg);
+        filter: drop-shadow(0 0 6px #b2f7ef);
+      }
+    </style>
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/Scxs7L0vhZ4" title="Travel Video" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+    <section id="teens" class="site-section" style="display:none;">
+      <h2>Teenagers</h2>
+      <div class="section-content">
+        <div>
+          <img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=400&q=80" alt="Teens">
+          <div>Fun, advice, and support for teens. All are welcome!</div>
+          <div class="links">
+            <a href="https://www.dosomething.org/us" target="_blank">DoSomething.org</a>
+            <a href="https://www.reddit.com/r/teens/" target="_blank">Reddit Teens</a>
+            <a href="https://www.youth.gov/youth-topics/teen-mental-health" target="_blank">Teen Mental Health</a>
+          </div>
+        </div>
+        <div>
+          <iframe width="320" height="180" src="https://www.youtube.com/embed/1t0A_tZGrYw" title="Teen Video" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+    <section id="kids" class="site-section" style="display:none;">
+      <h2>Kids Zone</h2>
+      <div class="section-content">
+        <div>
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Kids">
+          <div>Games, learning, and fun for kids of all ages and backgrounds.</div>
+          <div class="links">
+            <a href="https://pbskids.org/" target="_blank">PBS Kids</a>
+            <a href="https://www.coolmathgames.com/" target="_blank">Cool Math Games</a>
+            <a href="https://www.natgeokids.com/" target="_blank">Nat Geo Kids</a>
+          </div>
+        </div>
+        <div>
+          <iframe width="320" height="180" src="https://www.youtube.com/embed/2QKg5SZ_35I" title="Kids Video" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+    <section id="education" class="site-section" style="display:none;">
+      <h2>Education</h2>
+      <div class="section-content">
+        <div>
+          <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="Education">
+          <div>Learning resources for all ages, backgrounds, and interests.</div>
+          <div class="links">
+            <a href="https://www.khanacademy.org/" target="_blank">Khan Academy</a>
+            <a href="https://www.duolingo.com/" target="_blank">Duolingo</a>
+            <a href="https://www.sciencebuddies.org/" target="_blank">Science Buddies</a>
+          </div>
+        </div>
+        <div>
+          <iframe width="320" height="180" src="https://www.youtube.com/embed/6Hz6q4l2hCk" title="Education Video" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+// Travel Photo Upload Handler
+function addTravelPhoto() {
+  const input = document.getElementById('travel-photo-upload');
+  const preview = document.getElementById('travel-photo-preview');
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.innerHTML = `<img src="${e.target.result}" alt="Your Travel Photo" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #00b89444;">`;
+    };
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    preview.innerHTML = '<span style="color:#e75480;">No photo selected.</span>';
+  }
+}
+
+// Travel Quiz Submission Handler
+function submitTravelQuiz() {
+  const form = document.getElementById('travel-quiz');
+  const tripType = form.elements['tripType'].value;
+  const activity = form.elements['activity'].value;
+  const destination = form.elements['destination'].value;
+  let msg = `You love <b>${tripType}</b> trips`;
+  if (activity) msg += `, enjoy <b>${activity}</b>`;
+  if (destination) msg += `, and dream of <b>${destination}</b>!`;
+  document.getElementById('travel-quiz-result').innerHTML = msg + ' ✈️';
+}
+// Dad Joke Generator
+const dadJokes = [
+  "Why did the scarecrow win an award? Because he was outstanding in his field!",
+  "I'm reading a book on anti-gravity. It's impossible to put down!",
+  "Why don't skeletons fight each other? They don't have the guts.",
+  "What do you call fake spaghetti? An impasta!",
+  "How do you organize a space party? You planet.",
+  "Why did the golfer bring two pairs of pants? In case he got a hole in one!",
+  "What do you call cheese that isn't yours? Nacho cheese!"
+];
+function generateDadJoke() {
+  const joke = dadJokes[Math.floor(Math.random() * dadJokes.length)];
+  document.getElementById('dad-joke').innerText = joke;
+}
+
+// Quick BBQ Recipe Generator
+const bbqRecipes = [
+  "Classic BBQ Chicken: Marinate chicken in BBQ sauce, grill 6-8 min per side.",
+  "Grilled Corn: Brush with butter, sprinkle with salt, grill until charred.",
+  "BBQ Ribs: Rub with spices, slow cook, finish on grill with sauce.",
+  "Veggie Skewers: Thread peppers, onions, mushrooms, grill 10 min, turn often.",
+  "Steak Perfection: Salt, pepper, grill 4-5 min per side for medium-rare."
+];
+function generateBBQRecipe() {
+  const recipe = bbqRecipes[Math.floor(Math.random() * bbqRecipes.length)];
+  document.getElementById('dad-bbq-recipe').innerText = recipe;
+}
+// Single Dad Quiz Submission Handler
+function submitSingleDadQuiz() {
+  const form = document.getElementById('single-dad-quiz');
+  const lookingFor = form.elements['lookingFor'].value;
+  const favActivity = form.elements['favActivity'].value;
+  const kids = form.elements['kids'].value;
+  const quality = form.elements['quality'].value;
+  let msg = `You're looking for <b>${lookingFor}</b>`;
+  if (favActivity) msg += `, love <b>${favActivity}</b>`;
+  if (kids) msg += `, have <b>${kids}</b> kid(s)`;
+  if (quality) msg += `, and value <b>${quality}</b> most!`;
+  document.getElementById('single-dad-quiz-result').innerHTML = msg + ' 💪';
+}
+// Single Mom Quiz Submission Handler
+function submitSingleMomQuiz() {
+  const form = document.getElementById('single-mom-quiz');
+  const lookingFor = form.elements['lookingFor'].value;
+  const favActivity = form.elements['favActivity'].value;
+  const kids = form.elements['kids'].value;
+  const quality = form.elements['quality'].value;
+  let msg = `You're looking for <b>${lookingFor}</b>`;
+  if (favActivity) msg += `, love <b>${favActivity}</b>`;
+  if (kids) msg += `, have <b>${kids}</b> kid(s)`;
+  if (quality) msg += `, and value <b>${quality}</b> most!`;
+  document.getElementById('single-mom-quiz-result').innerHTML = msg + ' 💖';
+}
+    // Mom Tip of the Day
+    const momTips = [
+      "Take a few minutes for yourself today—you deserve it!",
+      "Ask for help when you need it. Supermoms need support too!",
+      "Celebrate small wins. Every day is progress.",
+      "Stay hydrated and eat a healthy snack!",
+      "Connect with another mom today."
+    ];
+    document.getElementById('mom-tip').innerText = momTips[new Date().getDate() % momTips.length];
+
+    // Recipe of the Week
+    const momRecipes = [
+      {name: "One-Pan Chicken & Veggies", link: "https://www.eatingwell.com/recipe/252652/one-pan-chicken-vegetables/"},
+      {name: "Easy Overnight Oats", link: "https://www.allrecipes.com/recipe/244251/overnight-oats/"},
+      {name: "Healthy Turkey Chili", link: "https://www.eatingwell.com/recipe/249222/healthy-turkey-chili/"},
+      {name: "Veggie-Packed Pasta", link: "https://www.bonappetit.com/recipe/veggie-packed-pasta"}
+    ];
+    const recipe = momRecipes[new Date().getDate() % momRecipes.length];
+    document.getElementById('mom-recipe').innerText = recipe.name;
+    document.getElementById('mom-recipe-link').href = recipe.link;
+
+    // Self-Care Spinner
+    const selfCareIdeas = [
+      "Take a 10-minute walk",
+      "Read a chapter of a book",
+      "Call a friend",
+      "Enjoy a cup of tea",
+      "Listen to your favorite song",
+      "Do a quick stretch"
+    ];
+    function spinSelfCare() {
+      document.getElementById('selfcare-result').innerText = selfCareIdeas[Math.floor(Math.random()*selfCareIdeas.length)];
+    }
+
+    // Milestone Tracker
+    function addMilestone() {
+      const input = document.getElementById('milestone-input');
+      if (input.value.trim()) {
+        const ul = document.getElementById('milestone-list');
+        const li = document.createElement('li');
+        li.innerText = input.value;
+        ul.appendChild(li);
+        input.value = '';
+      }
+    }
+
+    // Gratitude Wall
+    function addGratitude() {
+      const input = document.getElementById('gratitude-input');
+      if (input.value.trim()) {
+        const ul = document.getElementById('gratitude-list');
+        const li = document.createElement('li');
+        li.innerText = input.value;
+        ul.appendChild(li);
+        input.value = '';
+      }
+    }
+
+    // Mom Shout-Out
+    function addShoutout() {
+      const input = document.getElementById('shoutout-input');
+      if (input.value.trim()) {
+        const ul = document.getElementById('shoutout-list');
+        const li = document.createElement('li');
+        li.innerText = input.value;
+        ul.appendChild(li);
+        input.value = '';
+      }
+    }
+
+    // Book/Podcast Recommendation
+    const momBooks = [
+      {name: "The Gifts of Imperfection by Brené Brown", link: "https://brenebrown.com/book/the-gifts-of-imperfection/"},
+      {name: "The Mom Hour (Podcast)", link: "https://themomhour.com/"},
+      {name: "Bringing Up Bébé by Pamela Druckerman", link: "https://www.pameladruckerman.com/bringing-up-bebe/"},
+      {name: "Mom and Mind (Podcast)", link: "https://www.momandmind.com/"}
+    ];
+    const book = momBooks[new Date().getDate() % momBooks.length];
+    document.getElementById('mom-book').innerText = book.name;
+    document.getElementById('mom-book-link').href = book.link;
+
+    // Share Your Story
+    function addMomStory() {
+      const input = document.getElementById('mom-story-input');
+      if (input.value.trim()) {
+        const ul = document.getElementById('mom-story-list');
+        const li = document.createElement('li');
+        li.innerText = input.value;
+        ul.appendChild(li);
+        input.value = '';
+      }
+    }
+  </script>
+  <script>
+    // Mom Memory Game
+    const momMemoryItems = ['👶','🍼','🧸','🧦','🧁','🌸'];
+    let momMemoryCards = [];
+        <!-- Tab Panels -->
+        <div id="travels-tab-panels" style="width:100%;max-width:900px;">
+          <div id="travels-panel-gallery" class="flare-card travels-panel" style="display:block;background:linear-gradient(90deg,#f8fafc 60%,#e0fcff 100%);border-radius:18px;padding:32px 0 22px 0;box-shadow:0 4px 18px #00626622;align-items:center;border:2px solid #00b89422;transition:all 0.2s;margin-bottom:32px;">
+            <h3 style="color:#006266;font-size:1.5em;font-weight:600;margin-bottom:12px;letter-spacing:0.5px;"><i class="fa fa-picture-o"></i> Travel Photo Gallery</h3>
+            <div id="travel-gallery" style="display:flex;gap:24px;justify-content:center;align-items:center;flex-wrap:wrap;">
+              <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Mountains" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #00b89444;">
+              <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Lake" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #00b89444;">
+              <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Desert" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #00b89444;">
+              <img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=400&q=80" alt="City" style="height:120px;width:180px;object-fit:cover;border-radius:14px;box-shadow:0 2px 8px #00b89444;">
+            </div>
+          </div>
+          <div id="travels-panel-upload" class="flare-card travels-panel" style="display:none;background:rgba(255,255,255,0.99);border-radius:18px;padding:32px 0 22px 0;box-shadow:0 4px 18px #00626622;align-items:center;border:2px solid #00b89422;transition:all 0.2s;margin-bottom:32px;">
+            <h3 style="color:#006266;font-size:1.2em;font-weight:500;margin-bottom:10px;"><i class="fa fa-upload"></i> Share Your Travel Photo</h3>
+            <input type="file" id="travel-photo-upload" accept="image/*" style="margin-bottom:12px;">
+            <button onclick="addTravelPhoto()" style="padding:6px 18px;border-radius:8px;background:#00b894;color:#fff;font-size:1em;border:none;cursor:pointer;">Upload</button>
+            <div id="travel-photo-preview" style="margin-top:12px;"></div>
+          </div>
+          <div id="travels-panel-quiz" class="flare-card travels-panel" style="display:none;background:linear-gradient(90deg,#f8fafc 60%,#e0fcff 100%);border-radius:18px;padding:32px 0 22px 0;box-shadow:0 4px 18px #00626622;align-items:center;border:2px solid #00b89422;transition:all 0.2s;margin-bottom:32px;">
+            <h3 style="color:#006266;font-size:1.2em;font-weight:500;margin-bottom:10px;"><i class="fa fa-question-circle"></i> Travel Quiz</h3>
+            <form id="travel-quiz" style="text-align:left;font-size:1em;width:100%;max-width:340px;">
+              <label>What type of trip do you prefer?<br>
+                <select name="tripType" style="margin:6px 0 12px 0;width:100%;padding:4px 8px;border-radius:6px;border:1px solid #00b894;">
+                  <option value="adventure">Adventure</option>
+                  <option value="relaxation">Relaxation</option>
+                  <option value="cultural">Cultural</option>
+                  <option value="nature">Nature</option>
+                  <option value="city">City</option>
+                </select>
+              </label><br>
+              <label>Favorite travel activity?<br>
+                <input type="text" name="activity" placeholder="e.g. Hiking, Museums, Food" style="width:100%;padding:4px 8px;border-radius:6px;border:1px solid #00b894;margin-bottom:12px;">
+              </label><br>
+              <label>Dream destination?<br>
+                <input type="text" name="destination" placeholder="e.g. Paris, Tokyo, Grand Canyon" style="width:100%;padding:4px 8px;border-radius:6px;border:1px solid #00b894;margin-bottom:12px;">
+              </label><br>
+              <button type="button" onclick="submitTravelQuiz()" style="margin-top:8px;padding:6px 18px;border-radius:8px;background:#00b894;color:#fff;font-size:1em;border:none;cursor:pointer;">Submit</button>
+            </form>
+            <div id="travel-quiz-result" style="margin-top:12px;color:#00b894;font-weight:bold;"></div>
+          </div>
+          <div id="travels-panel-book" class="flare-card travels-panel" style="display:none;background:linear-gradient(120deg,#e0fcff 60%,#b2f7ef 100%);border-radius:22px;padding:34px 0 24px 0;box-shadow:0 6px 24px #00b89433;align-items:center;position:relative;overflow:hidden;border:2px solid #00b89422;transition:all 0.2s;margin-bottom:32px;">
+            <h3 style="color:#006266;font-size:1.45em;font-weight:700;margin-bottom:18px;letter-spacing:0.5px;text-shadow:0 2px 8px #fff8;display:flex;align-items:center;gap:10px;">
+              <span style="display:inline-block;background:#00b89422;border-radius:50%;padding:12px 16px 12px 14px;"><i class="fa fa-plane" style="font-size:1.3em;color:#00b894;"></i></span>
+              Book Your Trip
+            </h3>
+            <ul style="list-style:none;padding:0;margin:0;width:95%;max-width:340px;display:flex;flex-direction:column;gap:14px;">
+              <li><a href="https://www.kayak.com/flights" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-plane" style="font-size:1.2em;"></i> Flights</a></li>
+              <li><a href="https://www.booking.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-bed" style="font-size:1.2em;"></i> Hotels</a></li>
+              <li><a href="https://www.airbnb.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-home" style="font-size:1.2em;"></i> Vacation Rentals</a></li>
+              <li><a href="https://www.rentalcars.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-car" style="font-size:1.2em;"></i> Car Rentals</a></li>
+              <li><a href="https://www.viator.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-map-signs" style="font-size:1.2em;"></i> Tours & Activities</a></li>
+              <li><a href="https://www.expedia.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-globe" style="font-size:1.2em;"></i> Expedia (All-in-One)</a></li>
+              <li><a href="https://www.worldnomads.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-shield" style="font-size:1.2em;"></i> Travel Insurance</a></li>
+              <li><a href="https://www.nomadicmatt.com/travel-blogs/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-pencil" style="font-size:1.2em;"></i> Travel Blogs</a></li>
+              <li><a href="https://www.travelfashiongirl.com/ultimate-packing-list/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-suitcase" style="font-size:1.2em;"></i> Packing Lists</a></li>
+              <li><a href="https://www.xe.com/currencyconverter/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-money" style="font-size:1.2em;"></i> Currency Converter</a></li>
+              <li><a href="https://www.weather.com/" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-sun-o" style="font-size:1.2em;"></i> Weather</a></li>
+              <li><a href="https://www.tripadvisor.com/ShowForum-g1-i12567-Travel-Gadgets_and_Gear.html" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;background:#fff;box-shadow:0 2px 8px #00b89422;font-size:1.13em;font-weight:600;color:#00b894;text-decoration:none;transition:background 0.2s,box-shadow 0.2s;"><i class="fa fa-comments" style="font-size:1.2em;"></i> Travel Forums</a></li>
+            </ul>
+          </div>
+          <div id="travels-panel-game" class="flare-card travels-panel" style="display:none;background:rgba(255,255,255,0.99);border-radius:18px;padding:32px 0 22px 0;box-shadow:0 4px 18px #00626622;align-items:center;border:2px solid #00b89422;transition:all 0.2s;margin-bottom:32px;">
+            <h3 style="color:#006266;font-size:1.2em;font-weight:500;margin-bottom:10px;"><i class="fa fa-gamepad"></i> Travel Game Idea</h3>
+            <div style="font-size:1.08em;color:#00b894;">Try the classic <b>License Plate Game</b>: Spot license plates from as many states/countries as you can during your trip. Keep score and see who wins!<br><br>
+              <a href="https://www.licenseplategame.com/" target="_blank" style="display:inline-block;margin-top:10px;padding:8px 18px;background:#00b894;color:#fff;border-radius:8px;font-weight:600;text-decoration:none;box-shadow:0 2px 8px #00b89422;transition:background 0.2s;">Play Online License Plate Game</a>
+            </div>
+          </div>
+          <div id="travels-panel-video" class="flare-card travels-panel" style="display:none;background:linear-gradient(90deg,#e0fcff 60%,#f8fafc 100%);border-radius:14px;padding:28px 16px;box-shadow:0 4px 18px #00626622;text-align:center;border:2px solid #00b89422;transition:all 0.2s;">
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/Scxs7L0vhZ4" title="Travel Video" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
+          </div>
+        </div>
+  // Travels Section Tabs
+  function showTravelsTab(tab) {
+    const tabs = ['gallery','upload','quiz','book','game','video'];
+    tabs.forEach(t => {
+      document.getElementById('travels-panel-' + t).style.display = (t === tab) ? 'block' : 'none';
+      const btns = document.querySelectorAll('.travels-tab-btn');
+      btns.forEach(btn => {
+        if(btn.textContent.toLowerCase().includes(tab)) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+    });
+  }
+      "Honey never spoils! Archaeologists have found edible honey in ancient tombs.",
+      "Bananas are berries, but strawberries aren't.",
+      "A group of flamingos is called a 'flamboyance'.",
+      "Octopuses have three hearts.",
+      "The Eiffel Tower can be 15 cm taller during hot days."
+    ];
+    function showRandomFact() {
+      document.getElementById('random-fact').innerText = facts[Math.floor(Math.random()*facts.length)];
+    }
+
+    // Mini clicker game
+    let clickerScore = 0;
+    function clickerAdd() {
+      clickerScore++;
+      document.getElementById('clicker-score').innerText = 'Score: ' + clickerScore;
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script>
+    // Show/hide social bar only on About section
+    function updateSocialBar() {
+      var about = document.getElementById('about');
+      var bar = document.getElementById('socialBar');
+      if (about && bar) {
+        bar.style.display = (about.style.display !== 'none') ? 'flex' : 'none';
+      }
+    }
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', function() {
+        setTimeout(updateSocialBar, 120);
+      });
+    });
+    window.addEventListener('DOMContentLoaded', updateSocialBar);
+  </script>
+  <script>
+  // Full-page starfield and spaceship animation
+  function randomBetween(a, b) { return a + Math.random() * (b - a); }
+  function createStar(w, h) {
+    return {
+      x: Math.random() * w,
+      y: Math.random() * h,
+      z: randomBetween(0.2, 1),
+      r: randomBetween(0.3, 1.2),
+      speed: randomBetween(0.2, 1.2)
+    };
+  }
+  function createShip(w, h) {
+    return {
+      x: Math.random() * w,
+      y: Math.random() * h * 0.7,
+      vx: randomBetween(1, 2.5),
+      size: randomBetween(18, 32),
+      color: [
+        '#ffec00','#00eaff','#ff00c8','#fff','#ff7b00','#00ffb2'
+      ][Math.floor(Math.random()*6)]
+    };
+  }
+  function drawShip(ctx, x, y, size, color) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(size/32, size/32);
+    ctx.beginPath();
+    ctx.moveTo(0, -12); ctx.lineTo(8, 12); ctx.lineTo(0, 6); ctx.lineTo(-8, 12); ctx.closePath();
+    ctx.fillStyle = color; ctx.shadowColor = color; ctx.shadowBlur = 8; ctx.fill();
+    ctx.beginPath(); ctx.arc(0, 2, 3, 0, 2*Math.PI);
+    ctx.fillStyle = '#fff'; ctx.shadowBlur = 0; ctx.fill();
+    ctx.restore();
+  }
+  function animateStarfieldBG() {
+    const canvas = document.getElementById('starfield-bg');
+    if (!canvas) return;
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    const w = () => canvas.width, h = () => canvas.height;
+    let stars = Array.from({length: 120}, () => createStar(w(), h()));
+    let ships = Array.from({length: 6}, () => createShip(w(), h()));
+    function draw() {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,w(),h());
+      // Draw stars
+      for (let s of stars) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, 2*Math.PI);
+        ctx.fillStyle = `rgba(255,255,255,${0.5 + 0.5*s.z})`;
+        ctx.shadowColor = '#fff';
+        ctx.shadowBlur = 6 * s.z;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        s.x -= s.speed * s.z;
+        if (s.x < -2) { Object.assign(s, createStar(w(), h())); s.x = w()+2; }
+      }
+      // Draw ships
+      for (let ship of ships) {
+        drawShip(ctx, ship.x, ship.y, ship.size, ship.color);
+        ship.x -= ship.vx;
+        if (ship.x < -40) { Object.assign(ship, createShip(w(), h())); ship.x = w()+40; }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+  window.addEventListener('DOMContentLoaded', animateStarfieldBG);
+  </script>
+  <script>
+    // Show only the selected section, hide others
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Remove active from all links
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+        // Hide all sections
+        document.querySelectorAll('.site-section').forEach(sec => sec.style.display = 'none');
+        // Show the selected section
+        const id = this.getAttribute('href').replace('#','');
+        const section = document.getElementById(id);
+        if(section) section.style.display = '';
+        // Optionally update URL hash
+        window.location.hash = this.getAttribute('href');
+      });
+    });
+    // On page load, show section from hash if present
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.replace('#','');
+      if(hash) {
+        const nav = document.querySelector(`nav a[href="#${hash}"]`);
+        if(nav) nav.click();
+      }
+    });
+  </script>
+</body>
+</html>
+
