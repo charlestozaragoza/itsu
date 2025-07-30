@@ -32,5 +32,22 @@
     </div>
   </main>
   <script src="game.js"></script>
+  <script>
+    // Start the game automatically when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Wait for game.js to load and then call resetGame
+      if (typeof resetGame === 'function') {
+        resetGame();
+      } else {
+        // If not yet loaded, try again shortly
+        let tries = 0;
+        function tryStart() {
+          if (typeof resetGame === 'function') resetGame();
+          else if (++tries < 10) setTimeout(tryStart, 100);
+        }
+        tryStart();
+      }
+    });
+  </script>
 </body>
 </html>
