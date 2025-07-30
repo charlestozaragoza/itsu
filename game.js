@@ -68,7 +68,8 @@ if (isMobile()) {
   mobileControls.style.transform = 'translateX(-50%)';
   mobileControls.style.display = 'flex';
   mobileControls.style.justifyContent = 'center';
-  mobileControls.style.zIndex = '1000';
+  mobileControls.style.zIndex = '9999';
+  mobileControls.style.pointerEvents = 'auto';
   document.body.appendChild(mobileControls);
 
   // Prevent scrolling when touching controls
@@ -512,7 +513,7 @@ document.addEventListener('keydown', e => {
 submitAnswer.onclick = handleAnswer;
 answerInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleAnswer(); });
 
-// Mobile button event listeners with hold support
+// Mobile button event listeners with pointer events and feedback
 if (isMobile() && mobileControls) {
   const btnLeft = document.getElementById('btn-left');
   const btnRight = document.getElementById('btn-right');
@@ -537,47 +538,62 @@ if (isMobile() && mobileControls) {
     playSound('shoot');
   }
 
-  // Hold for continuous movement/shooting
-  btnLeft.addEventListener('touchstart', function(e) {
+  // Add visual feedback
+  function setActive(btn, active) {
+    if (active) btn.style.filter = 'brightness(1.5)';
+    else btn.style.filter = '';
+  }
+
+  // Pointer events for all platforms
+  btnLeft.addEventListener('pointerdown', function(e) {
     e.preventDefault();
     leftAction();
+    setActive(btnLeft, true);
     if (holdIntervals.left) clearInterval(holdIntervals.left);
     holdIntervals.left = setInterval(leftAction, 80);
   });
-  btnLeft.addEventListener('touchend', function(e) {
+  btnLeft.addEventListener('pointerup', function(e) {
     e.preventDefault();
     clearInterval(holdIntervals.left);
+    setActive(btnLeft, false);
   });
-  btnLeft.addEventListener('touchcancel', function(e) {
+  btnLeft.addEventListener('pointerleave', function(e) {
     clearInterval(holdIntervals.left);
+    setActive(btnLeft, false);
   });
 
-  btnRight.addEventListener('touchstart', function(e) {
+  btnRight.addEventListener('pointerdown', function(e) {
     e.preventDefault();
     rightAction();
+    setActive(btnRight, true);
     if (holdIntervals.right) clearInterval(holdIntervals.right);
     holdIntervals.right = setInterval(rightAction, 80);
   });
-  btnRight.addEventListener('touchend', function(e) {
+  btnRight.addEventListener('pointerup', function(e) {
     e.preventDefault();
     clearInterval(holdIntervals.right);
+    setActive(btnRight, false);
   });
-  btnRight.addEventListener('touchcancel', function(e) {
+  btnRight.addEventListener('pointerleave', function(e) {
     clearInterval(holdIntervals.right);
+    setActive(btnRight, false);
   });
 
-  btnShoot.addEventListener('touchstart', function(e) {
+  btnShoot.addEventListener('pointerdown', function(e) {
     e.preventDefault();
     shootAction();
+    setActive(btnShoot, true);
     if (holdIntervals.shoot) clearInterval(holdIntervals.shoot);
     holdIntervals.shoot = setInterval(shootAction, 200);
   });
-  btnShoot.addEventListener('touchend', function(e) {
+  btnShoot.addEventListener('pointerup', function(e) {
     e.preventDefault();
     clearInterval(holdIntervals.shoot);
+    setActive(btnShoot, false);
   });
-  btnShoot.addEventListener('touchcancel', function(e) {
+  btnShoot.addEventListener('pointerleave', function(e) {
     clearInterval(holdIntervals.shoot);
+    setActive(btnShoot, false);
   });
 }
 
