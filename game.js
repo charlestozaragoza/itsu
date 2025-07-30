@@ -31,17 +31,15 @@ const answerInput = document.getElementById('answer-input');
 const submitAnswer = document.getElementById('submit-answer');
 const clueText = document.getElementById('clue-text');
 
-// --- Mobile Controls ---
-// Create mobile control buttons if on mobile
+
+// --- Mobile Controls (Reset & Modern Implementation) ---
 function isMobile() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-let mobileControls = null;
-let joystick = null;
-let shootBtn = null;
-let joystickData = { active: false, startX: 0, x: 0, dx: 0 };
-let moveInterval = null;
+let mobileControls, joystick, shootBtn, joystickKnob, moveInterval;
+let joystickState = { active: false, startX: 0, x: 0 };
+
 if (isMobile()) {
   // Responsive canvas for mobile
   function resizeCanvas() {
@@ -62,7 +60,7 @@ if (isMobile()) {
   let old = document.getElementById('mobile-controls');
   if (old) old.remove();
 
-  // Create controls container
+  // Controls container
   mobileControls = document.createElement('div');
   mobileControls.id = 'mobile-controls';
   mobileControls.style.position = 'fixed';
@@ -91,6 +89,7 @@ if (isMobile()) {
   joystick.style.touchAction = 'none';
   joystick.style.userSelect = 'none';
   joystick.innerHTML = '<div id="joystick-knob" style="width:48px;height:48px;background:#2d8cff;border-radius:50%;box-shadow:0 2px 8px #0003;"></div>';
+  joystickKnob = joystick.querySelector('#joystick-knob');
   mobileControls.appendChild(joystick);
 
   // Shoot button (bottom right)
@@ -118,6 +117,91 @@ if (isMobile()) {
 
   // Prevent scrolling when touching controls
   mobileControls.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+
+  // Joystick logic
+  let center = { x: 45, y: 45 };
+  let dragging = false;
+  function movePlayer(dir) {
+    if (!gameActive) return;
+    if (dir < 0 && player.x > 0) player.x -= 8;
+    if (dir > 0 && player.x < canvas.width - player.w) player.x += 8;
+  }
+  function onJoyStart(e) {
+    dragging = true;
+    let rect = joystick.getBoundingClientRect();
+    let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    joystickState.startX = x;
+    joystickState.x = x;
+    joystickKnob.style.transition = 'none';
+    if (moveInterval) clearInterval(moveInterval);
+    moveInterval = setInterval(() => {
+      let dx = joystickState.x - center.x;
+      if (Math.abs(dx) > 10) {
+        let dir = dx < 0 ? -1 : 1;
+        movePlayer(dir);
+      }
+    }, 24);
+  }
+  function onJoyMove(e) {
+    if (!dragging) return;
+    let rect = joystick.getBoundingClientRect();
+    let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    let dx = Math.max(-35, Math.min(35, x - center.x));
+    joystickState.x = center.x + dx;
+    joystickKnob.style.transform = `translateX(${dx}px)`;
+  }
+  function onJoyEnd(e) {
+    dragging = false;
+    joystickState.x = center.x;
+    joystickKnob.style.transition = 'transform 0.15s';
+    joystickKnob.style.transform = 'translateX(0)';
+    if (moveInterval) clearInterval(moveInterval);
+  }
+  joystick.addEventListener('pointerdown', onJoyStart);
+  joystick.addEventListener('pointermove', onJoyMove);
+  joystick.addEventListener('pointerup', onJoyEnd);
+  joystick.addEventListener('pointerleave', onJoyEnd);
+  joystick.addEventListener('touchstart', onJoyStart);
+  joystick.addEventListener('touchmove', onJoyMove);
+  joystick.addEventListener('touchend', onJoyEnd);
+  joystick.addEventListener('touchcancel', onJoyEnd);
+
+  // Shoot button logic
+  function shootAction() {
+    if (!gameActive) return;
+    if (player.doubleShot > 0) {
+      bullets.push({ x: player.x + 6, y: player.y });
+      bullets.push({ x: player.x + 30, y: player.y });
+    } else {
+      bullets.push({ x: player.x + 18, y: player.y });
+    }
+    playSound('shoot');
+  }
+  let shootInterval = null;
+  shootBtn.addEventListener('pointerdown', function(e) {
+    e.preventDefault();
+    shootAction();
+    shootBtn.style.filter = 'brightness(1.5)';
+    if (shootInterval) clearInterval(shootInterval);
+    shootInterval = setInterval(shootAction, 220);
+  });
+  shootBtn.addEventListener('pointerup', function(e) {
+    e.preventDefault();
+    clearInterval(shootInterval);
+    shootBtn.style.filter = '';
+  });
+  shootBtn.addEventListener('pointerleave', function(e) {
+    clearInterval(shootInterval);
+    shootBtn.style.filter = '';
+  });
+  shootBtn.addEventListener('touchend', function(e) {
+    clearInterval(shootInterval);
+    shootBtn.style.filter = '';
+  });
+  shootBtn.addEventListener('touchcancel', function(e) {
+    clearInterval(shootInterval);
+    shootBtn.style.filter = '';
+  });
 }
 
 
