@@ -38,7 +38,10 @@ function isMobile() {
 }
 
 let mobileControls = null;
-let holdIntervals = { left: null, right: null, shoot: null };
+let joystick = null;
+let shootBtn = null;
+let joystickData = { active: false, startX: 0, x: 0, dx: 0 };
+let moveInterval = null;
 if (isMobile()) {
   // Responsive canvas for mobile
   function resizeCanvas() {
@@ -55,21 +58,62 @@ if (isMobile()) {
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
 
+  // Remove old controls if present
+  let old = document.getElementById('mobile-controls');
+  if (old) old.remove();
+
+  // Create controls container
   mobileControls = document.createElement('div');
   mobileControls.id = 'mobile-controls';
-  mobileControls.innerHTML = `
-    <button id="btn-left" aria-label="Left" style="width:60px;height:60px;font-size:2rem;margin:8px;border-radius:50%;background:#2d8cff;color:#fff;border:none;touch-action:none;">◀️</button>
-    <button id="btn-shoot" aria-label="Shoot" style="width:60px;height:60px;font-size:2rem;margin:8px;border-radius:50%;background:#ffb300;color:#fff;border:none;touch-action:none;">🔫</button>
-    <button id="btn-right" aria-label="Right" style="width:60px;height:60px;font-size:2rem;margin:8px;border-radius:50%;background:#2d8cff;color:#fff;border:none;touch-action:none;">▶️</button>
-  `;
   mobileControls.style.position = 'fixed';
-  mobileControls.style.bottom = '24px';
-  mobileControls.style.left = '50%';
-  mobileControls.style.transform = 'translateX(-50%)';
-  mobileControls.style.display = 'flex';
-  mobileControls.style.justifyContent = 'center';
+  mobileControls.style.left = '0';
+  mobileControls.style.right = '0';
+  mobileControls.style.bottom = '0';
+  mobileControls.style.width = '100vw';
+  mobileControls.style.height = '100vh';
+  mobileControls.style.pointerEvents = 'none';
   mobileControls.style.zIndex = '9999';
-  mobileControls.style.pointerEvents = 'auto';
+
+  // Joystick (bottom left)
+  joystick = document.createElement('div');
+  joystick.id = 'joystick';
+  joystick.style.position = 'absolute';
+  joystick.style.left = '32px';
+  joystick.style.bottom = '32px';
+  joystick.style.width = '90px';
+  joystick.style.height = '90px';
+  joystick.style.background = 'rgba(60,80,180,0.12)';
+  joystick.style.borderRadius = '50%';
+  joystick.style.display = 'flex';
+  joystick.style.alignItems = 'center';
+  joystick.style.justifyContent = 'center';
+  joystick.style.pointerEvents = 'auto';
+  joystick.style.touchAction = 'none';
+  joystick.style.userSelect = 'none';
+  joystick.innerHTML = '<div id="joystick-knob" style="width:48px;height:48px;background:#2d8cff;border-radius:50%;box-shadow:0 2px 8px #0003;"></div>';
+  mobileControls.appendChild(joystick);
+
+  // Shoot button (bottom right)
+  shootBtn = document.createElement('button');
+  shootBtn.id = 'shoot-btn';
+  shootBtn.innerHTML = '🔫';
+  shootBtn.setAttribute('aria-label', 'Shoot');
+  shootBtn.style.position = 'absolute';
+  shootBtn.style.right = '32px';
+  shootBtn.style.bottom = '40px';
+  shootBtn.style.width = '72px';
+  shootBtn.style.height = '72px';
+  shootBtn.style.fontSize = '2.5rem';
+  shootBtn.style.borderRadius = '50%';
+  shootBtn.style.background = '#ffb300';
+  shootBtn.style.color = '#fff';
+  shootBtn.style.border = 'none';
+  shootBtn.style.boxShadow = '0 2px 8px #0003';
+  shootBtn.style.pointerEvents = 'auto';
+  shootBtn.style.touchAction = 'none';
+  shootBtn.style.userSelect = 'none';
+  mobileControls.appendChild(shootBtn);
+
   document.body.appendChild(mobileControls);
 
   // Prevent scrolling when touching controls
@@ -513,20 +557,67 @@ document.addEventListener('keydown', e => {
 submitAnswer.onclick = handleAnswer;
 answerInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleAnswer(); });
 
-// Mobile button event listeners with pointer events and feedback
-if (isMobile() && mobileControls) {
-  const btnLeft = document.getElementById('btn-left');
-  const btnRight = document.getElementById('btn-right');
-  const btnShoot = document.getElementById('btn-shoot');
+// Virtual joystick and shoot button event listeners
+if (isMobile() && joystick && shootBtn) {
+  let knob = joystick.querySelector('#joystick-knob');
+  let center = { x: 45, y: 45 };
+  let dragging = false;
+  let lastDir = 0;
 
-  function leftAction() {
+  function movePlayer(dir) {
     if (!gameActive) return;
-    if (player.x > 0) player.x -= 24;
+    if (dir < 0 && player.x > 0) player.x -= 8;
+    if (dir > 0 && player.x < canvas.width - player.w) player.x += 8;
   }
-  function rightAction() {
-    if (!gameActive) return;
-    if (player.x < canvas.width - player.w) player.x += 24;
+
+  function onPointerDown(e) {
+    dragging = true;
+    joystickData.active = true;
+    let rect = joystick.getBoundingClientRect();
+    let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    joystickData.startX = x;
+    joystickData.x = x;
+    knob.style.transition = 'none';
+    if (moveInterval) clearInterval(moveInterval);
+    moveInterval = setInterval(() => {
+      let dx = joystickData.x - center.x;
+      if (Math.abs(dx) > 10) {
+        let dir = dx < 0 ? -1 : 1;
+        movePlayer(dir);
+        lastDir = dir;
+      } else {
+        lastDir = 0;
+      }
+    }, 24);
   }
+  function onPointerMove(e) {
+    if (!dragging) return;
+    let rect = joystick.getBoundingClientRect();
+    let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    let dx = Math.max(-35, Math.min(35, x - center.x));
+    joystickData.x = center.x + dx;
+    knob.style.transform = `translateX(${dx}px)`;
+  }
+  function onPointerUp(e) {
+    dragging = false;
+    joystickData.active = false;
+    joystickData.x = center.x;
+    knob.style.transition = 'transform 0.15s';
+    knob.style.transform = 'translateX(0)';
+    if (moveInterval) clearInterval(moveInterval);
+    lastDir = 0;
+  }
+
+  joystick.addEventListener('pointerdown', onPointerDown);
+  joystick.addEventListener('pointermove', onPointerMove);
+  joystick.addEventListener('pointerup', onPointerUp);
+  joystick.addEventListener('pointerleave', onPointerUp);
+  joystick.addEventListener('touchstart', onPointerDown);
+  joystick.addEventListener('touchmove', onPointerMove);
+  joystick.addEventListener('touchend', onPointerUp);
+  joystick.addEventListener('touchcancel', onPointerUp);
+
+  // Shoot button
   function shootAction() {
     if (!gameActive) return;
     if (player.doubleShot > 0) {
@@ -537,63 +628,30 @@ if (isMobile() && mobileControls) {
     }
     playSound('shoot');
   }
-
-  // Add visual feedback
-  function setActive(btn, active) {
-    if (active) btn.style.filter = 'brightness(1.5)';
-    else btn.style.filter = '';
-  }
-
-  // Pointer events for all platforms
-  btnLeft.addEventListener('pointerdown', function(e) {
-    e.preventDefault();
-    leftAction();
-    setActive(btnLeft, true);
-    if (holdIntervals.left) clearInterval(holdIntervals.left);
-    holdIntervals.left = setInterval(leftAction, 80);
-  });
-  btnLeft.addEventListener('pointerup', function(e) {
-    e.preventDefault();
-    clearInterval(holdIntervals.left);
-    setActive(btnLeft, false);
-  });
-  btnLeft.addEventListener('pointerleave', function(e) {
-    clearInterval(holdIntervals.left);
-    setActive(btnLeft, false);
-  });
-
-  btnRight.addEventListener('pointerdown', function(e) {
-    e.preventDefault();
-    rightAction();
-    setActive(btnRight, true);
-    if (holdIntervals.right) clearInterval(holdIntervals.right);
-    holdIntervals.right = setInterval(rightAction, 80);
-  });
-  btnRight.addEventListener('pointerup', function(e) {
-    e.preventDefault();
-    clearInterval(holdIntervals.right);
-    setActive(btnRight, false);
-  });
-  btnRight.addEventListener('pointerleave', function(e) {
-    clearInterval(holdIntervals.right);
-    setActive(btnRight, false);
-  });
-
-  btnShoot.addEventListener('pointerdown', function(e) {
+  let shootInterval = null;
+  shootBtn.addEventListener('pointerdown', function(e) {
     e.preventDefault();
     shootAction();
-    setActive(btnShoot, true);
-    if (holdIntervals.shoot) clearInterval(holdIntervals.shoot);
-    holdIntervals.shoot = setInterval(shootAction, 200);
+    shootBtn.style.filter = 'brightness(1.5)';
+    if (shootInterval) clearInterval(shootInterval);
+    shootInterval = setInterval(shootAction, 220);
   });
-  btnShoot.addEventListener('pointerup', function(e) {
+  shootBtn.addEventListener('pointerup', function(e) {
     e.preventDefault();
-    clearInterval(holdIntervals.shoot);
-    setActive(btnShoot, false);
+    clearInterval(shootInterval);
+    shootBtn.style.filter = '';
   });
-  btnShoot.addEventListener('pointerleave', function(e) {
-    clearInterval(holdIntervals.shoot);
-    setActive(btnShoot, false);
+  shootBtn.addEventListener('pointerleave', function(e) {
+    clearInterval(shootInterval);
+    shootBtn.style.filter = '';
+  });
+  shootBtn.addEventListener('touchend', function(e) {
+    clearInterval(shootInterval);
+    shootBtn.style.filter = '';
+  });
+  shootBtn.addEventListener('touchcancel', function(e) {
+    clearInterval(shootInterval);
+    shootBtn.style.filter = '';
   });
 }
 
