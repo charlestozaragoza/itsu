@@ -60,7 +60,8 @@ if (isMobile()) {
   let old = document.getElementById('mobile-controls');
   if (old) old.remove();
 
-  // Controls container
+
+  // Controls container (modern look)
   mobileControls = document.createElement('div');
   mobileControls.id = 'mobile-controls';
   mobileControls.style.position = 'fixed';
@@ -71,16 +72,18 @@ if (isMobile()) {
   mobileControls.style.height = '100vh';
   mobileControls.style.pointerEvents = 'none';
   mobileControls.style.zIndex = '9999';
+  mobileControls.style.background = 'none';
 
-  // Joystick (bottom left)
+  // Joystick (bottom left, modern style)
   joystick = document.createElement('div');
   joystick.id = 'joystick';
   joystick.style.position = 'absolute';
   joystick.style.left = '32px';
   joystick.style.bottom = '32px';
-  joystick.style.width = '90px';
-  joystick.style.height = '90px';
-  joystick.style.background = 'rgba(60,80,180,0.12)';
+  joystick.style.width = '100px';
+  joystick.style.height = '100px';
+  joystick.style.background = 'radial-gradient(circle at 60% 60%, #3a8dde 0%, #1a2a4a 100%)';
+  joystick.style.border = '2.5px solid #bfe6ff';
   joystick.style.borderRadius = '50%';
   joystick.style.display = 'flex';
   joystick.style.alignItems = 'center';
@@ -88,29 +91,36 @@ if (isMobile()) {
   joystick.style.pointerEvents = 'auto';
   joystick.style.touchAction = 'none';
   joystick.style.userSelect = 'none';
-  joystick.innerHTML = '<div id="joystick-knob" style="width:48px;height:48px;background:#2d8cff;border-radius:50%;box-shadow:0 2px 8px #0003;"></div>';
+  joystick.style.boxShadow = '0 6px 24px #0005, 0 1.5px 8px #2d8cff55';
+  joystick.innerHTML = `<div id="joystick-knob" style="width:54px;height:54px;background:linear-gradient(135deg,#fff 0%,#2d8cff 100%);border-radius:50%;box-shadow:0 2px 12px #2d8cff88,0 1.5px 8px #0002;display:flex;align-items:center;justify-content:center;transition:box-shadow 0.2s;"><div style='width:16px;height:16px;border-radius:50%;background:#bfe6ff;box-shadow:0 0 8px #fff8;'></div></div>`;
   joystickKnob = joystick.querySelector('#joystick-knob');
   mobileControls.appendChild(joystick);
 
-  // Shoot button (bottom right)
+  // Shoot button (bottom right, modern style)
   shootBtn = document.createElement('button');
   shootBtn.id = 'shoot-btn';
-  shootBtn.innerHTML = '🔫';
+  shootBtn.innerHTML = '<span style="font-size:2.2rem;">🔫</span>';
   shootBtn.setAttribute('aria-label', 'Shoot');
   shootBtn.style.position = 'absolute';
-  shootBtn.style.right = '32px';
-  shootBtn.style.bottom = '40px';
-  shootBtn.style.width = '72px';
-  shootBtn.style.height = '72px';
-  shootBtn.style.fontSize = '2.5rem';
+  shootBtn.style.right = '36px';
+  shootBtn.style.bottom = '44px';
+  shootBtn.style.width = '80px';
+  shootBtn.style.height = '80px';
+  shootBtn.style.fontSize = '2.2rem';
   shootBtn.style.borderRadius = '50%';
-  shootBtn.style.background = '#ffb300';
+  shootBtn.style.background = 'linear-gradient(135deg,#ffe066 0%,#ffb300 100%)';
   shootBtn.style.color = '#fff';
-  shootBtn.style.border = 'none';
-  shootBtn.style.boxShadow = '0 2px 8px #0003';
+  shootBtn.style.border = '2.5px solid #fff';
+  shootBtn.style.boxShadow = '0 6px 24px #ffb30055, 0 1.5px 8px #0002';
   shootBtn.style.pointerEvents = 'auto';
   shootBtn.style.touchAction = 'none';
   shootBtn.style.userSelect = 'none';
+  shootBtn.style.transition = 'box-shadow 0.2s, filter 0.2s';
+  shootBtn.style.display = 'flex';
+  shootBtn.style.alignItems = 'center';
+  shootBtn.style.justifyContent = 'center';
+  shootBtn.style.outline = 'none';
+  shootBtn.style.cursor = 'pointer';
   mobileControls.appendChild(shootBtn);
 
   document.body.appendChild(mobileControls);
