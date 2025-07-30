@@ -1055,7 +1055,7 @@ function submitSingleMomQuiz() {
   <!-- ittsu: Family Space Shooter Game Modal -->
   <button id="open-game-modal" style="position:fixed;top:24px;right:24px;z-index:1001;padding:0.7rem 1.6rem;font-size:1.15rem;background:#2d8cff;color:#fff;border:none;border-radius:8px;box-shadow:0 2px 12px #0006;cursor:pointer;">Play Space Game</button>
   <div id="game-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000a;z-index:1000;align-items:center;justify-content:center;">
-    <div style="background:#181f2a;padding:2rem 1.5rem 1.5rem 1.5rem;border-radius:18px;box-shadow:0 8px 40px #000b;min-width:340px;max-width:98vw;max-height:98vh;overflow:auto;position:relative;display:flex;flex-direction:column;align-items:center;">
+    <div style="background:#181f2a;padding:2rem 1.5rem 1.5rem 1.5rem;border-radius:18px;box-shadow:0 8px 40px #000b;min-width:320px;max-width:98vw;max-height:98vh;overflow:auto;position:relative;display:flex;flex-direction:column;align-items:center;width:98vw;">
       <button id="close-game-modal" style="position:absolute;top:12px;right:12px;background:#ff4444;color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:1.1rem;cursor:pointer;">Close</button>
       <h1 style="margin-top:0;margin-bottom:1rem;">itsu: Family Space Shooter</h1>
       <section style="margin: 1rem 0; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
@@ -1072,7 +1072,15 @@ function submitSingleMomQuiz() {
         <button id="start-btn" style="padding: 0.5rem 1.5rem; font-size: 1.1rem; background: #2d8cff; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Start Game</button>
         <button id="launch-btn" style="padding: 0.5rem 1.5rem; font-size: 1.1rem; background: #ffb300; color: #222; border: none; border-radius: 6px; cursor: pointer; margin-left: 1rem;">Launch Game</button>
       </section>
-      <canvas id="game-canvas" width="480" height="640" style="background: #222; border-radius: 12px; box-shadow: 0 4px 24px #0008;"></canvas>
+      <div style="width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;">
+        <canvas id="game-canvas" width="480" height="640" style="background: #222; border-radius: 12px; box-shadow: 0 4px 24px #0008; width:100%; max-width:480px; height:auto;"></canvas>
+        <!-- Mobile controls -->
+        <div id="mobile-controls" style="display:flex;justify-content:center;align-items:center;gap:18px;margin:18px 0 0 0;width:100%;">
+          <button id="btn-left" style="padding:1.2em 1.5em;font-size:1.5em;background:#2d8cff;color:#fff;border:none;border-radius:50%;box-shadow:0 2px 8px #0006;">◀️</button>
+          <button id="btn-shoot" style="padding:1.2em 1.5em;font-size:1.5em;background:#ffb300;color:#222;border:none;border-radius:50%;box-shadow:0 2px 8px #0006;">🔫</button>
+          <button id="btn-right" style="padding:1.2em 1.5em;font-size:1.5em;background:#2d8cff;color:#fff;border:none;border-radius:50%;box-shadow:0 2px 8px #0006;">▶️</button>
+        </div>
+      </div>
       <div id="question-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#000a; align-items:center; justify-content:center; z-index:1010;">
         <div style="background:#fff; color:#222; padding:2rem; border-radius:12px; min-width:300px; max-width:90vw; text-align:center;">
           <h2 id="question-text"></h2>
@@ -1085,6 +1093,51 @@ function submitSingleMomQuiz() {
   </div>
   <script src="game.js"></script>
   <script>
+    // Responsive canvas for mobile
+    function resizeGameCanvas() {
+      var canvas = document.getElementById('game-canvas');
+      if (!canvas) return;
+      var parent = canvas.parentElement;
+      var w = Math.min(window.innerWidth * 0.98, 480);
+      var h = w * (640/480);
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+    }
+    window.addEventListener('resize', resizeGameCanvas);
+    document.addEventListener('DOMContentLoaded', resizeGameCanvas);
+
+    // Touch controls for iPhone/mobile
+    document.addEventListener('DOMContentLoaded', function() {
+      var leftBtn = document.getElementById('btn-left');
+      var rightBtn = document.getElementById('btn-right');
+      var shootBtn = document.getElementById('btn-shoot');
+      var moveInterval = null;
+      function movePlayer(dir) {
+        var canvas = document.getElementById('game-canvas');
+        if (!window.player || !canvas) return;
+        var step = 24;
+        if (dir === 'left' && player.x > 0) player.x -= step;
+        if (dir === 'right' && player.x < canvas.width - player.w) player.x += step;
+      }
+      if (leftBtn) {
+        leftBtn.addEventListener('touchstart', function(e) { e.preventDefault(); movePlayer('left'); moveInterval = setInterval(()=>movePlayer('left'), 120); });
+        leftBtn.addEventListener('touchend', function(e) { e.preventDefault(); clearInterval(moveInterval); });
+        leftBtn.addEventListener('mousedown', function(e) { movePlayer('left'); moveInterval = setInterval(()=>movePlayer('left'), 120); });
+        leftBtn.addEventListener('mouseup', function(e) { clearInterval(moveInterval); });
+        leftBtn.addEventListener('mouseleave', function(e) { clearInterval(moveInterval); });
+      }
+      if (rightBtn) {
+        rightBtn.addEventListener('touchstart', function(e) { e.preventDefault(); movePlayer('right'); moveInterval = setInterval(()=>movePlayer('right'), 120); });
+        rightBtn.addEventListener('touchend', function(e) { e.preventDefault(); clearInterval(moveInterval); });
+        rightBtn.addEventListener('mousedown', function(e) { movePlayer('right'); moveInterval = setInterval(()=>movePlayer('right'), 120); });
+        rightBtn.addEventListener('mouseup', function(e) { clearInterval(moveInterval); });
+        rightBtn.addEventListener('mouseleave', function(e) { clearInterval(moveInterval); });
+      }
+      if (shootBtn) {
+        shootBtn.addEventListener('touchstart', function(e) { e.preventDefault(); if (window.gameActive) { document.dispatchEvent(new KeyboardEvent('keydown', {key:' '})); } });
+        shootBtn.addEventListener('mousedown', function(e) { if (window.gameActive) { document.dispatchEvent(new KeyboardEvent('keydown', {key:' '})); } });
+      }
+    });
     // Modal open/close logic
     document.addEventListener('DOMContentLoaded', function() {
       var openBtn = document.getElementById('open-game-modal');
