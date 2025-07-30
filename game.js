@@ -19,6 +19,7 @@ function playSound(name) {
 }
 // ittsu: Family Space Shooter - Interactive, inclusive, and fun for all ages!
 
+
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 const startBtn = document.getElementById('start-btn');
@@ -29,6 +30,50 @@ const questionText = document.getElementById('question-text');
 const answerInput = document.getElementById('answer-input');
 const submitAnswer = document.getElementById('submit-answer');
 const clueText = document.getElementById('clue-text');
+
+// --- Mobile Controls ---
+// Create mobile control buttons if on mobile
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+let mobileControls = null;
+let holdIntervals = { left: null, right: null, shoot: null };
+if (isMobile()) {
+  // Responsive canvas for mobile
+  function resizeCanvas() {
+    let dpr = window.devicePixelRatio || 1;
+    let w = Math.min(window.innerWidth, 480);
+    let h = Math.min(window.innerHeight, 640);
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  mobileControls = document.createElement('div');
+  mobileControls.id = 'mobile-controls';
+  mobileControls.innerHTML = `
+    <button id="btn-left" aria-label="Left" style="width:60px;height:60px;font-size:2rem;margin:8px;border-radius:50%;background:#2d8cff;color:#fff;border:none;touch-action:none;">◀️</button>
+    <button id="btn-shoot" aria-label="Shoot" style="width:60px;height:60px;font-size:2rem;margin:8px;border-radius:50%;background:#ffb300;color:#fff;border:none;touch-action:none;">🔫</button>
+    <button id="btn-right" aria-label="Right" style="width:60px;height:60px;font-size:2rem;margin:8px;border-radius:50%;background:#2d8cff;color:#fff;border:none;touch-action:none;">▶️</button>
+  `;
+  mobileControls.style.position = 'fixed';
+  mobileControls.style.bottom = '24px';
+  mobileControls.style.left = '50%';
+  mobileControls.style.transform = 'translateX(-50%)';
+  mobileControls.style.display = 'flex';
+  mobileControls.style.justifyContent = 'center';
+  mobileControls.style.zIndex = '1000';
+  document.body.appendChild(mobileControls);
+
+  // Prevent scrolling when touching controls
+  mobileControls.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+}
 
 
 // Game state
@@ -447,6 +492,7 @@ function handleAnswer() {
   }
 }
 
+
 // Controls
 startBtn.onclick = resetGame;
 document.addEventListener('keydown', e => {
@@ -460,11 +506,80 @@ document.addEventListener('keydown', e => {
     } else {
       bullets.push({ x: player.x + 18, y: player.y });
     }
-  }
     playSound('shoot');
+  }
 });
 submitAnswer.onclick = handleAnswer;
 answerInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleAnswer(); });
+
+// Mobile button event listeners with hold support
+if (isMobile() && mobileControls) {
+  const btnLeft = document.getElementById('btn-left');
+  const btnRight = document.getElementById('btn-right');
+  const btnShoot = document.getElementById('btn-shoot');
+
+  function leftAction() {
+    if (!gameActive) return;
+    if (player.x > 0) player.x -= 24;
+  }
+  function rightAction() {
+    if (!gameActive) return;
+    if (player.x < canvas.width - player.w) player.x += 24;
+  }
+  function shootAction() {
+    if (!gameActive) return;
+    if (player.doubleShot > 0) {
+      bullets.push({ x: player.x + 6, y: player.y });
+      bullets.push({ x: player.x + 30, y: player.y });
+    } else {
+      bullets.push({ x: player.x + 18, y: player.y });
+    }
+    playSound('shoot');
+  }
+
+  // Hold for continuous movement/shooting
+  btnLeft.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    leftAction();
+    if (holdIntervals.left) clearInterval(holdIntervals.left);
+    holdIntervals.left = setInterval(leftAction, 80);
+  });
+  btnLeft.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    clearInterval(holdIntervals.left);
+  });
+  btnLeft.addEventListener('touchcancel', function(e) {
+    clearInterval(holdIntervals.left);
+  });
+
+  btnRight.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    rightAction();
+    if (holdIntervals.right) clearInterval(holdIntervals.right);
+    holdIntervals.right = setInterval(rightAction, 80);
+  });
+  btnRight.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    clearInterval(holdIntervals.right);
+  });
+  btnRight.addEventListener('touchcancel', function(e) {
+    clearInterval(holdIntervals.right);
+  });
+
+  btnShoot.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    shootAction();
+    if (holdIntervals.shoot) clearInterval(holdIntervals.shoot);
+    holdIntervals.shoot = setInterval(shootAction, 200);
+  });
+  btnShoot.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    clearInterval(holdIntervals.shoot);
+  });
+  btnShoot.addEventListener('touchcancel', function(e) {
+    clearInterval(holdIntervals.shoot);
+  });
+}
 
 // Uploads
 playerUpload.onchange = e => {
